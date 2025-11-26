@@ -1,16 +1,22 @@
 {
-  "name": "backend",
+  "name": "prep4int-backend",
   "version": "1.0.0",
   "main": "app.js",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
   "dependencies": {
+    "dotenv": "^16.6.1",
     "express": "^4.18.2",
     "hbs": "^4.2.0",
     "mongoose": "^7.2.2",
     "validator": "^13.9.0"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "node app.js"
   },
-  "author": "aman",
+  "author": "Nitin Raj",
   "license": "ISC"
 }

@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: prep4int
+    env: node
+    plan: free
+    buildCommand: "cd backend && npm install"
+    startCommand: "cd backend && node app.js"
+    envVars:
+      - key: MONGODB_URI
+        value: ""  # Add your MongoDB URI here
+      - key: PORT
+        value: 8000
+      - key: NODE_ENV
+        value: production

@@ -1,14 +1,20 @@
-const path=require("path");
-const express= require("express");
-const app= express();
-require("./db/conn");
-const Register=require("./models/registers");
-const contactus=require("./models/contactus");
-const port= process.env.PORT || 8000;
+const path = require("path");
+const express = require("express");
+const app = express();
+require("./db/db/conn");
+const Register = require("./models/models/registers");
+const contactus = require("./models/models/contactus");
+const port = process.env.PORT || 8000;
 
 const { json } = require("express");
-const staticPath= path.join(__dirname,"../public");
-app.use(express.static(staticPath));
+const staticPath = path.join(__dirname, "../frontend");
+
+// Serve static files with caching for production
+app.use(express.static(staticPath, { 
+    maxAge: process.env.NODE_ENV === 'production' ? '1d' : '0',
+    etag: false 
+}));
+
 app.set("view engine","hbs");
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -95,6 +101,13 @@ app.post("/index", async (req,res)=>{
     }
 });
 
-app.listen(port,()=>{
-    console.log("world");
+// 404 Error Handler - handle undefined routes
+app.use((req, res) => {
+    res.status(404).render("404", {
+        title: "Page Not Found"
+    });
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });

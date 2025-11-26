@@ -1,0 +1,226 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                   PREP4INT - DEPLOYMENT ARCHITECTURE                       ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+WHAT GETS DEPLOYED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+     YOUR LOCAL MACHINE                    CLOUD SERVER (Render/Heroku)
+     ────────────────────                  ──────────────────────────
+
+┌─────────────────────────┐              ┌─────────────────────────────┐
+│   prep4int/ (root)      │              │   Your Deployed App         │
+├─────────────────────────┤              ├─────────────────────────────┤
+│ backend/                │─────────────▶│ backend/                    │
+│ ├─ app.js              │  DEPLOYED    │ ├─ app.js                  │
+│ ├─ package.json        │              │ ├─ node_modules/ (auto)    │
+│ ├─ db/                 │              │ ├─ db/                     │
+│ ├─ models/             │              │ ├─ models/                 │
+│ └─ views/              │              │ └─ views/                  │
+│                        │              │                             │
+│ frontend/              │─────────────▶│ frontend/                   │
+│ ├─ que.html            │  DEPLOYED    │ ├─ que.html                │
+│ ├─ alltopics.html      │              │ ├─ alltopics.html          │
+│ ├─ rec.html            │              │ ├─ rec.html                │
+│ ├─ prep4int.js         │              │ ├─ prep4int.js             │
+│ ├─ css/                │              │ ├─ css/                    │
+│ └─ img/                │              │ └─ img/                    │
+│                        │              │                             │
+│ Procfile               │─────────────▶│ (Used for deployment)       │
+│ render.yaml            │              │                             │
+│ package.json           │              │                             │
+│ .env (LOCAL ONLY)      │──────────────▗ .env (SET IN PLATFORM)      │
+└─────────────────────────┘              └─────────────────────────────┘
+        git push                                   ║
+           ║                                       ║
+           └──────────────────────────────────────►│
+                                         GitHub Webhook
+
+
+WHAT DOES NOT GET DEPLOYED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ .env file          → Set separately on deployment platform
+❌ node_modules/      → Downloaded during build
+❌ .git/              → Not needed on server
+❌ .gitignore         → Only used locally
+❌ Desktop files      → Not in git
+
+
+HOW IT ALL WORKS TOGETHER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    BROWSER                          YOUR SERVER                  DATABASE
+    ───────                          ──────────                  ────────
+
+    User visits
+    https://app.com
+           │
+           ▼
+    ┌────────────────────────┐
+    │ GET /                  │──────▶ express.get("/")
+    └────────────────────────┘       ├─ Renders register.hbs
+                                     └─ Returns HTML
+           ◀─────────────────────────┘
+
+    User submits registration
+    POST /register-data
+           │
+           ▼
+    ┌────────────────────────┐
+    │ POST /                 │──────▶ app.post("/")
+    │ {email, password, ...} │       ├─ Validates data
+    └────────────────────────┘       ├─ Saves to MongoDB
+                                     │  (MONGODB_URI from .env)
+                                     └─ Renders index.hbs
+           ◀─────────────────────────┘
+
+    User visits static page
+    GET /que.html
+           │
+           ▼
+    ┌────────────────────────┐
+    │ GET /que.html          │──────▶ express.static()
+    └────────────────────────┘       ├─ Serves /frontend/que.html
+                                     └─ Loads CSS & images
+           ◀─────────────────────────┘
+
+
+DEPLOYMENT FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. PREPARE (Local)
+   ├─ npm run install-all
+   ├─ Create .env file
+   ├─ npm start (test)
+   └─ All works ✓
+
+2. PUSH (Local → GitHub)
+   ├─ git add .
+   ├─ git commit -m "Ready"
+   └─ git push origin main
+        ║
+        ▼ (GitHub webhook)
+
+3. DEPLOY (GitHub → Render/Heroku)
+   ├─ Platform detects push
+   ├─ Runs: cd backend && npm install
+   ├─ Runs: cd backend && node app.js
+   ├─ App starts on PORT 8000
+   └─ Server listens for requests
+
+4. SERVE (Server → Users)
+   ├─ User visits https://app.onrender.com
+   ├─ Browser requests /
+   ├─ Server returns register.hbs
+   ├─ Browser renders HTML, CSS, JS
+   └─ App is live!
+
+
+FILE SERVING DIAGRAM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Express Server (on Render)
+│
+├─ app.get("/")           ──▶ Renders /backend/views/register.hbs
+│
+├─ app.get("/login")      ──▶ Renders /backend/views/login.hbs
+│
+├─ app.get("/index")      ──▶ Renders /backend/views/index.hbs
+│
+├─ GET /que.html          ──▶ Serves /frontend/que.html (static)
+│
+├─ GET /alltopics.html    ──▶ Serves /frontend/alltopics.html (static)
+│
+├─ GET /css/style.css     ──▶ Serves /frontend/css/style.css
+│
+├─ GET /img/logo.png      ──▶ Serves /frontend/img/logo.png
+│
+└─ POST /                 ──▶ Saves to MongoDB Atlas
+
+
+KEY POINTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Single deployment includes both backend & frontend
+✓ Frontend (HTML, CSS, images) served by Express as static files
+✓ Backend handles API routes and data persistence
+✓ Everything at one URL (no CORS issues)
+✓ .env file stored separately on deployment platform
+✓ MongoDB URI loaded from environment variable
+✓ Application is stateless (can scale)
+
+
+ENVIRONMENT VARIABLES ON PLATFORM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Render.com Dashboard:
+  ├─ Environment
+  │  ├─ MONGODB_URI = mongodb+srv://user:pass@...
+  │  └─ NODE_ENV = production
+
+Heroku Dashboard:
+  ├─ Settings → Config Vars
+  │  ├─ MONGODB_URI = mongodb+srv://user:pass@...
+  │  └─ NODE_ENV = production
+
+
+AFTER DEPLOYMENT - WHAT'S RUNNING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+On Render/Heroku:
+
+    Node.js Runtime
+    │
+    ├─ Reads MONGODB_URI from environment
+    │
+    ├─ Starts Express server
+    │  ├─ Listens on PORT 8000
+    │  ├─ Serves /backend/views/*.hbs templates
+    │  ├─ Serves /frontend/* static files
+    │  └─ Handles API routes
+    │
+    └─ Connects to MongoDB Atlas
+       ├─ Stores user registrations
+       ├─ Stores login data
+       └─ Stores contact form messages
+
+
+TROUBLESHOOTING CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+App won't start?
+  ✓ Check MONGODB_URI is correct
+  ✓ Check .env file exists on platform
+  ✓ Check app.js for syntax errors
+
+404 errors for CSS/images?
+  ✓ Check frontend/ folder exists
+  ✓ Check staticPath in app.js
+  ✓ Check browser console for 404s
+
+Can't register users?
+  ✓ Check MongoDB connection
+  ✓ Check MONGODB_URI in environment
+  ✓ Check network in MongoDB Atlas (0.0.0.0/0)
+
+Forms not working?
+  ✓ Check app.post() routes
+  ✓ Check form field names match
+  ✓ Check request body parsing
+
+
+READY TO DEPLOY?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Follow QUICK_DEPLOY.md:
+
+1. ✓ Create MongoDB account
+2. ✓ Create .env file
+3. ✓ Test locally (npm start)
+4. ✓ Push to GitHub
+5. ✓ Deploy to Render/Heroku
+
+That's it! Your app will be live! 🚀
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,24 +1,24 @@
 {
-  "name": "express",
+  "name": "prep4int",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "ansi-styles": "^3.2.1",
-    "chalk": "^2.4.1",
-    "color-convert": "^1.9.3",
-    "color-name": "^1.1.3",
-    "escape-string-regexp": "^1.0.5",
-    "express": "^4.18.2",
-    "has-flag": "^3.0.0",
-    "hbs": "^4.2.0",
-    "mongoose": "^7.2.2",
-    "supports-color": "^5.5.0",
-    "validator": "^13.9.0"
+  "description": "Interview Preparation Portal - Full Stack Application",
+  "main": "backend/app.js",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "cd backend && npm install && node app.js",
+    "dev": "cd backend && node app.js",
+    "install-all": "npm install && cd backend && npm install"
   },
-  "author": "aman",
+  "keywords": [
+    "interview",
+    "preparation",
+    "dsa",
+    "coding",
+    "practice"
+  ],
+  "author": "Nitin Raj",
   "license": "ISC"
 }
