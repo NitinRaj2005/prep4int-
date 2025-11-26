@@ -1,5 +1,6 @@
 const path = require("path");
 const express = require("express");
+const hbs = require("hbs");
 const app = express();
 require("./db/db/conn");
 const Register = require("./models/models/registers");
@@ -8,6 +9,10 @@ const port = process.env.PORT || 8000;
 
 const { json } = require("express");
 const staticPath = path.join(__dirname, "../frontend");
+
+// Explicitly set views directory and register hbs partials
+app.set('views', path.join(__dirname, 'views'));
+hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
 
 // Serve static files with caching for production
 app.use(express.static(staticPath, { 
