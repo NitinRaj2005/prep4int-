@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/prep4int.css">
+    <link rel="stylesheet" href="/css/prep4int.css?v=topics-search-20261010">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     <link rel="icon" type="image/x-icon" href="img/fevi.png">
     <title>C++ All Topics</title>
@@ -33,6 +33,16 @@
         <div class="a">
             <h1 class="aa">DSA Topics</h1>
         </div>
+    </div>
+    <div class="topic-search">
+        <label for="topic-search-input">Search topics</label>
+        <input
+            id="topic-search-input"
+            type="search"
+            placeholder="Search by topic name, such as Array, Graph, or Recursion"
+            autocomplete="off"
+        >
+        <p id="topic-search-status" role="status" aria-live="polite"></p>
     </div>
     <div class="whole">
         <div class="wrapper">
@@ -203,5 +213,6 @@
             </div>
         </div>
     </div>
+    <script src="/js/topics-search.js" defer></script>
 </body>
 </html>

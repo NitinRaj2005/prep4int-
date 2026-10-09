@@ -399,7 +399,7 @@ nav ul li a{
 }
 
 .question-search label,
-.recommendation-search label {
+.topic-search label {
     display: block;
     margin-bottom: 10px;
     color: #332b24;
@@ -433,10 +433,10 @@ nav ul li a{
     display: none;
 }
 
-.recommendation-search {
+.topic-search {
     box-sizing: border-box;
-    max-width: 680px;
-    margin: 22px auto;
+    max-width: 900px;
+    margin: 12px auto 20px;
     padding: 16px 20px;
     border: 1px solid #ead6b8;
     border-radius: 14px;
@@ -444,7 +444,7 @@ nav ul li a{
     box-shadow: 0 4px 14px rgba(50, 35, 20, 0.08);
 }
 
-#recommendation-search-input {
+#topic-search-input {
     box-sizing: border-box;
     width: 100%;
     padding: 12px 16px;
@@ -454,20 +454,20 @@ nav ul li a{
     font: inherit;
 }
 
-#recommendation-search-input:focus {
+#topic-search-input:focus {
     border-color: #5145e8;
     outline: 3px solid rgba(81, 69, 232, 0.18);
 }
 
-#recommendation-search-status {
+#topic-search-status {
     min-height: 1.4em;
     margin: 9px 0 0;
     color: #62574b;
     font-size: 0.92rem;
 }
 
-.recdsawrapper[hidden],
-.danger[hidden] {
+.whole .wrapper[hidden],
+.whole .card[hidden] {
     display: none;
 }
 
@@ -485,7 +485,7 @@ div.aman11 li{
     }
 
     .question-search,
-    .recommendation-search {
+    .topic-search {
         margin: 10px 12px 16px;
         padding: 14px 16px;
     }
