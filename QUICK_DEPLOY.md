@@ -17,7 +17,7 @@
 
 **Example connection string:**
 ```
-mongodb+srv://nitin:mypassword123@cluster0.s2jvkgz.mongodb.net/prep4int?retryWrites=true&w=majority
+mongodb+srv://<username>:<password>@<cluster-host>/<database>
 ```
 
 ---
@@ -28,7 +28,7 @@ mongodb+srv://nitin:mypassword123@cluster0.s2jvkgz.mongodb.net/prep4int?retryWri
 2. Add these lines:
    ```env
    PORT=8000
-   MONGODB_URI=mongodb+srv://nitin:mypassword123@cluster0.s2jvkgz.mongodb.net/prep4int?retryWrites=true&w=majority
+   MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-host>/<database>
    NODE_ENV=production
    ```
 3. Replace `nitin` and `mypassword123` with your MongoDB credentials

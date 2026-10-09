@@ -11,7 +11,7 @@
    ├─ Go to: mongodb.com/cloud/atlas
    ├─ Create free account and M0 cluster
    ├─ Create database user (username + password)
-   ├─ Get connection string: mongodb+srv://...
+   ├─ Get connection string: mongodb+srv://<username>:<password>@<cluster-host>/<database>
    └─ Copy the connection string
 
 2. 📝 CREATE .env FILE

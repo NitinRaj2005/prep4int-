@@ -6,10 +6,10 @@ Before deployment, please provide:
 
 ### 1. MongoDB Connection String
 ```
-MONGODB_URI = mongodb+srv://username:password@cluster.mongodb.net/database_name
+MONGODB_URI = mongodb+srv://<username>:<password>@<cluster-host>/<database>
 ```
 - Get from MongoDB Atlas
-- Should look like: `mongodb+srv://...`
+- Should look like: `mongodb+srv://<username>:<password>@<cluster-host>/<database>`
 
 ### 2. Deployment Platform Choice
 Choose ONE:

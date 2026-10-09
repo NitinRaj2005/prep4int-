@@ -32,7 +32,7 @@
 - [ ] Create `.env` file in `backend/` folder:
   ```env
   PORT=8000
-  MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/prep4int
+  MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-host>/<database>
   NODE_ENV=production
   ```
 - [ ] Never commit `.env` to git (already in .gitignore)

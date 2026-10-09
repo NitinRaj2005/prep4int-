@@ -22,7 +22,7 @@ npm install
 cp ../.env.example .env
 
 # Edit .env with your MongoDB URI
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database_name
+# MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-host>/<database>
 
 # Run server
 npm start
@@ -54,7 +54,7 @@ Visit: `http://localhost:8000`
    - Click "Environment" in Render dashboard
    - Add variable:
      - Key: `MONGODB_URI`
-     - Value: `mongodb+srv://username:password@cluster.mongodb.net/prep4int`
+     - Value: `mongodb+srv://<username>:<password>@<cluster-host>/<database>`
 
 5. **Deploy**
    - Click "Create Web Service"
@@ -77,7 +77,7 @@ Visit: `http://localhost:8000`
 
 3. **Set Environment Variables**
    ```bash
-   heroku config:set MONGODB_URI="mongodb+srv://username:password@cluster.mongodb.net/prep4int"
+   heroku config:set MONGODB_URI="mongodb+srv://<username>:<password>@<cluster-host>/<database>"
    ```
 
 4. **Deploy**
@@ -139,7 +139,7 @@ Create a `.env` file in the `backend` folder:
 
 ```env
 PORT=8000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/prep4int
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-host>/<database>
 NODE_ENV=production
 ```
 
@@ -168,7 +168,7 @@ NODE_ENV=production
 
 Example:
 ```
-mongodb+srv://nitin:secure-password@cluster0.s2jvkgz.mongodb.net/prep4int?retryWrites=true&w=majority
+mongodb+srv://<username>:<password>@<cluster-host>/<database>
 ```
 
 ---

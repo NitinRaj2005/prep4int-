@@ -156,12 +156,12 @@ ENVIRONMENT VARIABLES ON PLATFORM
 
 Render.com Dashboard:
   ├─ Environment
-  │  ├─ MONGODB_URI = mongodb+srv://user:pass@...
+  │  ├─ MONGODB_URI = mongodb+srv://<username>:<password>@<cluster-host>/<database>
   │  └─ NODE_ENV = production
 
 Heroku Dashboard:
   ├─ Settings → Config Vars
-  │  ├─ MONGODB_URI = mongodb+srv://user:pass@...
+  │  ├─ MONGODB_URI = mongodb+srv://<username>:<password>@<cluster-host>/<database>
   │  └─ NODE_ENV = production
 
 
