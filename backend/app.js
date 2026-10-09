@@ -58,7 +58,11 @@ app.use(session({
 }));
 app.use(express.static(staticPath, {
     maxAge: process.env.NODE_ENV === "production" ? "1d" : "0",
-    etag: false
+    setHeaders: (res, filePath) => {
+        if (/\.(?:html|css|js)$/i.test(filePath)) {
+            res.setHeader("Cache-Control", "no-cache, must-revalidate");
+        }
+    }
 }));
 
 const loginLimiter = rateLimit({
