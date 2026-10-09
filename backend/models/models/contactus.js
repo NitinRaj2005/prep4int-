@@ -1,22 +1,36 @@
-const mongoose=require("mongoose");
+const mongoose = require("mongoose");
 
-const employeeSchema= new mongoose.Schema({
+const contactUsSchema = new mongoose.Schema({
     fname: {
         type: String,
+        required: true,
+        trim: true,
+        maxlength: 100
     },
     lname: {
         type: String,
+        required: true,
+        trim: true,
+        maxlength: 100
     },
     email: {
         type: String,
+        required: true,
+        trim: true,
+        lowercase: true,
+        maxlength: 254
     },
     phone: {
-        type: Number,
+        type: String,
+        required: true,
+        maxlength: 16
     },
     message: {
         type: String,
+        required: true,
+        trim: true,
+        maxlength: 2000
     }
-})
+});
 
-const contactus =new mongoose.model("contactus", employeeSchema);
-module.exports= contactus;
+module.exports = mongoose.model("contactus", contactUsSchema);

@@ -1,63 +1,39 @@
-
-
 # Prep4Int – Interview Preparation Portal
 
-**Author:** Nitin Raj
+Prep4Int is a full-stack interview-preparation website with account registration and login, DSA topic pages, and a contact form.
 
-Prep4Int is a simple full-stack web application designed to help students prepare for coding interviews.
-It provides user authentication, topic pages for DSA practice, and a contact form to connect with the admin.
+## Tech stack
 
----
+- Backend: Node.js 18+, Express, Handlebars
+- Database: MongoDB with Mongoose
+- Frontend: HTML, CSS, JavaScript
 
-## ✨ Features
+## Run locally
 
-* **User Registration & Login** – Create an account, log in using email and password.
-* **DSA Topic Pages** – Static HTML pages for arrays, stacks, queues, recursion, dynamic programming, graphs, and more.
-* **Contact Us** – Form to submit queries, stored in MongoDB.
-* **Responsive UI** – Built using custom CSS, Tailwind CDN, and Font Awesome icons.
-* **Simple Navigation** – Home page with About, Practice, and Contact sections.
+1. Install the backend dependencies:
 
----
-
-## 🛠 Tech Stack
-
-* **Backend:** Node.js, Express
-* **Frontend:** Handlebars (hbs), HTML, CSS, JavaScript
-* **Database:** MongoDB with Mongoose
-* **Utilities:** validator, chalk
-
----
-
-## 📂 Project Structure
-
-```
-public/       # Static HTML, CSS, JS, images
-src/
-  app.js      # Express app setup & routes
-  db/conn.js  # MongoDB connection
-  models/     # Mongoose schemas
-views/        # Handlebars templates
-```
-
----
-
-## 🚀 Setup & Run
-
-1. Install dependencies:
-
-   ```bash
+   ```powershell
+   cd backend
    npm install
    ```
-2. Configure MongoDB connection in `src/db/conn.js` or via `MONGODB_URI` env variable.
-3. Start the server:
+
+2. Create `backend/.env` using the root `.env.example` as a template, set `MONGODB_URI` to a reachable MongoDB database, and use `NODE_ENV=development` for local work. In development, the server generates a temporary session secret if `SESSION_SECRET` is not set; set a stable random secret if you need sessions to survive restarts.
+
+3. Start the server from the project root:
 
    ```bash
-   node src/app.js
+   # PowerShell
+   $env:NODE_ENV = "development"
+   npm run dev
    ```
-4. Visit: [http://localhost:8000](http://localhost:8000)
 
----
+4. Visit [http://localhost:8000](http://localhost:8000).
 
+Production deployments must set both `MONGODB_URI` and a strong, private `SESSION_SECRET`. The session cookie is HTTP-only and uses the secure flag in production.
 
----
+## Account and form safeguards
 
+- New passwords are stored as bcrypt hashes; existing plaintext passwords are upgraded to hashes when the account next logs in successfully.
+- Email and username values are normalized, checked for duplicates, and protected by unique database indexes.
+- Registration, login, and contact form inputs are validated on the server. Login and registration attempts are rate-limited.
+- Logged-in users can mark DSA questions solved; their progress is stored on their account and restored when they return to the question page.

@@ -7,7 +7,9 @@ services:
     startCommand: "cd backend && node app.js"
     envVars:
       - key: MONGODB_URI
-        value: ""  # Add your MongoDB URI here
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
       - key: PORT
         value: 8000
       - key: NODE_ENV

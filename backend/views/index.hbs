@@ -195,19 +195,19 @@
                     <h2 class="form-title">Send us a message</h2>
                     <div class="form-fields">
                         <div class="form-group">
-                            <input type="text" name="fname" class="fname" placeholder="First Name">
+                            <input type="text" name="fname" class="fname" placeholder="First Name" maxlength="100" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="lname" class="lname" placeholder="Last Name">
+                            <input type="text" name="lname" class="lname" placeholder="Last Name" maxlength="100" required>
                         </div>
                         <div class="form-group">
-                            <input type="Email" name="email" class="email" placeholder="Mail">
+                            <input type="email" name="email" class="email" placeholder="Mail" maxlength="254" required>
                         </div>
                         <div class="form-group">
-                            <input type="number" name="phone" class="phone" placeholder="Phone">
+                            <input type="tel" name="phone" class="phone" placeholder="Phone" required>
                         </div>
                         <div class="form-group">
-                            <textarea name="message" placeholder="Write your message"></textarea>
+                            <textarea name="message" placeholder="Write your message" maxlength="2000" required></textarea>
                         </div>
                     </div>
                     <input id="send" type="submit" value="Send Message" class="submit-button">

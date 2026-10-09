@@ -1,59 +1,52 @@
-//schema and inserting
-const mongoose=require("mongoose");
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const passwordForBcrypt = require("../../utils/password");
 
-const employeeSchema= new mongoose.Schema({
+const employeeSchema = new mongoose.Schema({
     fullname: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        maxlength: 100
     },
     username: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        lowercase: true,
+        minlength: 3,
+        maxlength: 30,
+        unique: true
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        lowercase: true,
+        maxlength: 254,
+        unique: true
     },
     phone: {
-        type: Number,
-        required: true
+        type: String,
+        required: true,
+        maxlength: 16
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        select: false
     },
-    confirm: {
-        type: String,
-        // required: true
-    },
-})
+    solvedQuestions: {
+        type: [String],
+        default: []
+    }
+});
 
-const Register =new mongoose.model("Register", employeeSchema);
-module.exports= Register;
-// const reactPlaylist= new Playlist({
-//     name: "aman",
-//     ctype : "node",
-//     videos: 7,
-//     author : "singh",
-//     active: true,
-// })
-// reactPlaylist.save();
+employeeSchema.pre("save", async function hashPassword() {
+    if (!this.isModified("password") || /^\$2[aby]\$/.test(this.password)) {
+        return;
+    }
+    this.password = await bcrypt.hash(passwordForBcrypt(this.password), 12);
+});
 
-// const createDocument =async ()=>{
-//     try{
-//         const reactPlaylist= new Playlist({
-//             name: "kunnu",
-//             ctype : "backend",
-//             videos: 70,
-//             author : "singhaniya",
-//             active: true,
-//         })
-
-//         const result= await reactPlaylist.save();
-//         console.log(result);
-//     }catch(err){
-//         console.log(err);
-//     }
-// }
-// createDocument();
-
+module.exports = mongoose.model("Register", employeeSchema);

@@ -24,7 +24,7 @@
                   <li><a href="/index">Home</a></li>
                   <li><a href="alltopics.html">Topics</a></li>
                   <li><a href="rec.html">Recomm.</a></li>
-                  <li><a href="/">Log Out</a></li>
+                  <li><a href="/logout">Log Out</a></li>
               </ul>
           </li>
         </ul>
@@ -33,6 +33,24 @@
         <div class="a">
             <h1 class="aa">DSA Important Questions</h1>
         </div>
+    </div>
+    <section class="question-progress" aria-labelledby="question-progress-title">
+        <div>
+            <h2 id="question-progress-title">Your progress</h2>
+            <p id="solved-count" aria-live="polite">Loading progress...</p>
+            <progress id="solved-progress" value="0" max="1" aria-label="Questions solved"></progress>
+        </div>
+        <p id="progress-message" role="status"></p>
+    </section>
+    <div class="question-search">
+        <label for="question-search-input">Search questions</label>
+        <input
+            id="question-search-input"
+            type="search"
+            placeholder="Search by question or topic"
+            autocomplete="off"
+        >
+        <p id="question-search-status" role="status" aria-live="polite"></p>
     </div>
     <div class="quegrid-container">
         <div class="quegrid-item">
@@ -343,6 +361,7 @@
             </div>
         </div>
       </div>
+    <script src="/js/question-progress.js" defer></script>
 <body>
     
 </body>

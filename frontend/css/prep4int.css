@@ -322,11 +322,143 @@ nav ul li a{
     color: blue;
     font-size: 20px;
 }
+
+.question-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 12px 10px;
+    padding: 16px 24px;
+    border: 2px solid #333;
+    border-radius: 12px;
+    background: #fff8eb;
+}
+
+.question-progress h2,
+.question-progress p {
+    margin: 0 0 8px;
+}
+
+#solved-progress {
+    width: min(420px, 75vw);
+    height: 16px;
+    accent-color: #2d8a45;
+}
+
+#progress-message a {
+    color: #0645ad;
+}
+
+.aman11 li.question-solved > a {
+    color: #26703a;
+    text-decoration: line-through;
+}
+
+.question-solved-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 12px;
+    color: #333;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.question-solved-checkbox {
+    width: 17px;
+    height: 17px;
+    accent-color: #26703a;
+}
+
+.question-solved-checkbox:disabled {
+    cursor: not-allowed;
+}
+
+.question-search {
+    max-width: 680px;
+    margin: 20px auto;
+    padding: 0 16px;
+}
+
+.question-search label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+#question-search-input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #555;
+    border-radius: 8px;
+    font: inherit;
+}
+
+#question-search-input:focus {
+    border-color: #26703a;
+    outline: 3px solid rgba(38, 112, 58, 0.2);
+}
+
+#question-search-status {
+    min-height: 1.4em;
+    margin: 8px 0 0;
+}
+
+.quegrid-item[hidden],
+.aman11 li[hidden] {
+    display: none;
+}
+
+.recommendation-search {
+    max-width: 680px;
+    margin: 20px auto;
+    padding: 0 16px;
+}
+
+.recommendation-search label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+#recommendation-search-input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #555;
+    border-radius: 8px;
+    font: inherit;
+}
+
+#recommendation-search-input:focus {
+    border-color: #26703a;
+    outline: 3px solid rgba(38, 112, 58, 0.2);
+}
+
+#recommendation-search-status {
+    min-height: 1.4em;
+    margin: 8px 0 0;
+}
+
+.recdsawrapper[hidden],
+.danger[hidden] {
+    display: none;
+}
+
 div.aman11 li{
     padding-top: 10px;
 }
 
 @media only screen and (max-width: 550px) {
+    .question-progress {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px;
+    }
+
     .aman1 {
         padding-left: 10px;
         padding-top: 5px;
