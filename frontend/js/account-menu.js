@@ -41,6 +41,26 @@
             if (triggerName) triggerName.textContent = user.username || "Account";
             if (fullName) fullName.textContent = user.fullname || user.username || "Your account";
             if (usernameLabel) usernameLabel.textContent = user.username ? "@" + user.username : "";
+            document.querySelectorAll(".account-avatar").forEach((avatar) => {
+                let photo = avatar.querySelector("img.account-avatar-photo");
+                const icon = avatar.querySelector("i");
+                if (!photo) {
+                    photo = document.createElement("img");
+                    photo.className = "account-avatar-photo";
+                    photo.alt = "";
+                    photo.hidden = true;
+                    photo.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:50%;";
+                    avatar.appendChild(photo);
+                }
+                if (user.hasProfilePhoto) {
+                    photo.onload = () => { photo.hidden = false; if (icon) icon.hidden = true; };
+                    photo.onerror = () => { photo.hidden = true; if (icon) icon.hidden = false; };
+                    photo.src = "/api/profile/photo?v=" + Date.now();
+                } else {
+                    photo.hidden = true;
+                    if (icon) icon.hidden = false;
+                }
+            });
         })
         .catch(() => {});
 })();
