@@ -65,7 +65,7 @@ ul li.lioful:hover ul.dropdown {
 }
 
 
-nav ul{
+nav > ul {
     /* position: fixed; */
     position: relative;
     width: 100%;
@@ -1088,4 +1088,125 @@ ul li.account-menu ul.account-dropdown li a.account-logout i { color: #c0392b; }
 @media (max-width: 370px) {
     ul li.lioful { right: 55px; }
     .account-menu-trigger { min-height: 38px; padding: 4px 6px; }
+}
+
+
+/* Final layout fixes: keep nested menus independent from the main navbar */
+nav > ul > li.lioful {
+    right: 224px;
+    width: 48px;
+}
+nav > ul > li.lioful > a.insta {
+    box-sizing: border-box;
+    width: 48px;
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+nav > ul > li.lioful > ul.dropdown {
+    display: none;
+    width: 140px;
+    height: auto;
+    flex-direction: column;
+}
+nav > ul > li.lioful:hover > ul.dropdown,
+nav > ul > li.lioful:focus-within > ul.dropdown {
+    display: block;
+}
+nav > ul > li.account-menu {
+    box-sizing: border-box;
+    right: 10px;
+    top: 0;
+    width: auto;
+    height: 65px;
+    padding: 0;
+    margin: 0;
+}
+nav > ul > li.account-menu > ul.account-dropdown {
+    display: block;
+    position: absolute;
+    top: 57px;
+    right: 0;
+    width: 235px;
+    height: auto;
+    max-height: min(420px, calc(100vh - 80px));
+    overflow-y: auto;
+    flex-direction: column;
+    padding: 8px 0;
+    margin: 0;
+    list-style: none;
+    border: 1px solid #e4d7c4;
+    border-radius: 12px;
+    background: #fffdf8;
+    box-shadow: 0 10px 28px rgba(28, 24, 48, .2);
+    z-index: 1100;
+}
+nav > ul > li.account-menu > ul.account-dropdown[hidden] {
+    display: none !important;
+}
+nav > ul > li.account-menu > ul.account-dropdown > li {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+}
+nav > ul > li.account-menu > ul.account-dropdown > li.account-menu-header {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 12px 14px;
+}
+nav > ul > li.account-menu > ul.account-dropdown > li.account-menu-divider {
+    display: block;
+    width: auto;
+    height: 1px;
+    margin: 5px 0;
+    padding: 0;
+    background: #eee6da;
+}
+nav > ul > li.account-menu > ul.account-dropdown > li > a {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 15px;
+    color: #332d25;
+    text-align: left;
+    text-decoration: none;
+    font-size: 14px;
+    white-space: nowrap;
+}
+nav > ul > li.account-menu > ul.account-dropdown > li > a:hover {
+    color: rgb(55,55,190);
+    background: #f0f0ff;
+    box-shadow: none;
+    border: 0;
+    border-radius: 0;
+    transform: none;
+}
+nav > ul > li.account-menu > ul.account-dropdown > li > a.account-logout,
+nav > ul > li.account-menu > ul.account-dropdown > li > a.account-logout i {
+    color: #c0392b;
+}
+.account-menu-trigger:focus-visible,
+.account-dropdown a:focus-visible,
+.lioful > a:focus-visible {
+    outline: 3px solid #ffe66d;
+    outline-offset: 2px;
+}
+@media (max-width: 750px) {
+    nav > ul > li.lioful { right: 70px; }
+}
+@media (max-width: 550px) {
+    nav > ul > li.lioful { right: 62px; }
+    nav > ul > li.account-menu { right: 5px; }
+    nav > ul > li.account-menu > ul.account-dropdown {
+        right: 0;
+        width: min(235px, calc(100vw - 24px));
+    }
+}
+@media (max-width: 370px) {
+    nav > ul > li.lioful { right: 55px; }
 }
