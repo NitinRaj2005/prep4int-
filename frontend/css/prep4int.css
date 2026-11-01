@@ -1390,3 +1390,96 @@ nav > ul > li.account-menu > ul.account-dropdown > li > a.account-logout i { col
 @media (max-width: 370px) {
     nav > ul > li.lioful { right: 55px; }
 }
+
+
+/* Main horizontal navigation (hamburger menu removed) */
+nav > ul {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding-right: 220px;
+    box-sizing: border-box;
+    overflow: visible;
+}
+nav > ul > .brand {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+nav > ul > .navi {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 12px 0 28px;
+    gap: clamp(4px, 1.2vw, 22px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    white-space: nowrap;
+}
+nav > ul > .navi::-webkit-scrollbar { display: none; }
+nav > ul > .navi > .main-nav-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex: 0 0 auto;
+    padding: 10px 11px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: clamp(13px, 1.05vw, 17px);
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background .18s ease, color .18s ease;
+}
+nav > ul > .navi > .main-nav-link i { font-size: .9em; }
+nav > ul > .navi > .main-nav-link:hover,
+nav > ul > .navi > .main-nav-link:focus-visible {
+    color: #fff;
+    background: rgba(255,255,255,.17);
+    outline: none;
+    box-shadow: none;
+    transform: none;
+}
+nav > ul > li.account-menu { right: 10px; }
+nav > ul > li.account-menu > button.account-menu-trigger {
+    max-width: 205px;
+}
+@media (max-width: 1050px) {
+    nav > ul { padding-right: 190px; }
+    nav > ul > .navi { padding-left: 12px; gap: 2px; }
+    nav > ul > .navi > .main-nav-link { padding: 9px 7px; }
+}
+@media (max-width: 750px) {
+    nav > ul { padding-right: 160px; }
+    nav > ul > .navi {
+        display: flex !important;
+        justify-content: flex-start;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    nav > ul > .navi > .main-nav-link { font-size: 13px; padding: 8px 7px; }
+    nav > ul > .navi > .main-nav-link i { display: none; }
+    nav > ul > li.account-menu { right: 5px; }
+}
+@media (max-width: 550px) {
+    nav > ul { padding-right: 65px; }
+    nav > ul > .brand { font-size: 1.2rem; padding: 0 5px; }
+    nav > ul > .brand img { width: 55px; }
+    nav > ul > .navi { padding-left: 5px; gap: 0; }
+    nav > ul > .navi > .main-nav-link { font-size: 12px; padding: 8px 6px; }
+    nav > ul > li.account-menu > button.account-menu-trigger {
+        min-width: 44px;
+        width: 44px;
+        padding: 5px;
+    }
+    nav > ul > li.account-menu .account-trigger-name,
+    nav > ul > li.account-menu .account-chevron { display: none; }
+}
+@media (max-width: 370px) {
+    nav > ul { padding-right: 58px; }
+    nav > ul > .brand { font-size: 1.05rem; }
+    nav > ul > .brand img { width: 48px; }
+}
