@@ -1558,3 +1558,27 @@ nav > ul > .navi > .main-nav-link {
     nav > ul > li.brand > a.brand-link { font-size: 14px; }
     nav > ul > li.brand > a.brand-link > img { width: 32px; height: 32px; }
 }
+
+
+/* Keep the uploaded image inside the circular navbar avatar */
+.account-avatar {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+.account-avatar > i {
+    position: relative;
+    z-index: 1;
+}
+.account-avatar > img.account-avatar-photo {
+    position: absolute !important;
+    inset: 0;
+    z-index: 2;
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    object-position: center 35%;
+    border-radius: 50%;
+}
+.account-avatar > img.account-avatar-photo[hidden] { display: none !important; }
