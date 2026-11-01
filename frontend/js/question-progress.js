@@ -1,8 +1,5 @@
 (() => {
     const questionItems = Array.from(document.querySelectorAll(".aman11 li"));
-    const count = document.getElementById("solved-count");
-    const progress = document.getElementById("solved-progress");
-    const message = document.getElementById("progress-message");
     const searchInput = document.getElementById("question-search-input");
     const searchStatus = document.getElementById("question-search-status");
 
@@ -30,13 +27,6 @@
     });
 
     const solvedIds = new Set();
-
-    const renderProgress = () => {
-        const solvedCount = entries.filter(({ questionId }) => solvedIds.has(questionId)).length;
-        count.textContent = `${solvedCount} of ${entries.length} questions solved`;
-        progress.max = entries.length || 1;
-        progress.value = solvedCount;
-    };
 
     const filterQuestions = () => {
         const query = searchInput.value.trim().toLocaleLowerCase();
@@ -80,12 +70,7 @@
             });
             const data = await response.json();
             if (response.status === 401) {
-                message.textContent = "Log in to track your solved questions.";
-                const loginLink = document.createElement("a");
-                loginLink.href = "/login";
-                loginLink.textContent = "Log in";
-                message.append(" ", loginLink);
-                renderProgress();
+                setControlsEnabled(false);
                 return;
             }
             if (!response.ok) {
@@ -98,19 +83,15 @@
                 item.classList.toggle("question-solved", checkbox.checked);
                 checkbox.addEventListener("change", () => updateQuestion(item, questionId, checkbox));
             });
-            message.textContent = "Progress is saved to your account.";
-            renderProgress();
             setControlsEnabled(true);
         } catch (error) {
-            count.textContent = `Progress unavailable (${entries.length} questions)`;
-            message.textContent = error.message;
+            console.error("Unable to initialize question progress:", error);
         }
     };
 
     const updateQuestion = async (item, questionId, checkbox) => {
         const wasSolved = !checkbox.checked;
         checkbox.disabled = true;
-        message.textContent = "Saving progress...";
 
         try {
             const response = await fetch("/api/questions/progress", {
@@ -127,12 +108,10 @@
             data.solvedQuestionIds.forEach((id) => solvedIds.add(id));
             checkbox.checked = solvedIds.has(questionId);
             item.classList.toggle("question-solved", checkbox.checked);
-            message.textContent = "Progress saved.";
-            renderProgress();
         } catch (error) {
             checkbox.checked = wasSolved;
             item.classList.toggle("question-solved", wasSolved);
-            message.textContent = error.message;
+            console.error(error);
         } finally {
             checkbox.disabled = false;
         }
