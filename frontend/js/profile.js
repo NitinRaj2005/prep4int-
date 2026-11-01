@@ -70,6 +70,7 @@ if(photoInput){
             const data=await response.json();
             if(!response.ok)throw new Error(data.error||"Unable to upload photo.");
             showProfilePhoto(true);
+            document.dispatchEvent(new CustomEvent("profile-photo-updated",{detail:{hasPhoto:true}}));
             feedback(photoFeedback,data.message,"success");
         }catch(error){feedback(photoFeedback,error.message,"error")}
         finally{if(label)label.style.opacity="";photoInput.value=""}
@@ -84,6 +85,7 @@ if(removePhoto){
             const data=await response.json();
             if(!response.ok)throw new Error(data.error||"Unable to remove photo.");
             showProfilePhoto(false);
+            document.dispatchEvent(new CustomEvent("profile-photo-updated",{detail:{hasPhoto:false}}));
             feedback(photoFeedback,data.message,"success");
         }catch(error){feedback(photoFeedback,error.message,"error")}
         finally{removePhoto.disabled=false}
