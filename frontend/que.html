@@ -61,6 +61,11 @@
             placeholder="Search by question or topic"
             autocomplete="off"
         >
+        <div class="question-filter-controls" role="group" aria-label="Filter questions">
+            <button type="button" class="question-filter-btn active" data-question-filter="all" aria-pressed="true">All Questions</button>
+            <button type="button" class="question-filter-btn" data-question-filter="unsolved" aria-pressed="false">Unsolved</button>
+            <button type="button" class="question-filter-btn" data-question-filter="solved" aria-pressed="false">Solved</button>
+        </div>
         <p id="question-search-status" role="status" aria-live="polite"></p>
     </div>
     <div class="quegrid-container">
