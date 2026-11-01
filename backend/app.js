@@ -140,7 +140,7 @@ app.get("/api/profile/photo", requireAuthenticatedUser, async (req, res) => {
     try {
         const user = await Register.findById(req.session.userId).select("+profilePhoto");
         if (!user || !user.profilePhoto) return res.sendStatus(404);
-        const match = /^data:(image\\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(user.profilePhoto);
+        const match = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(user.profilePhoto);
         if (!match) return res.sendStatus(404);
         res.set({
             "Content-Type": match[1],
