@@ -58,6 +58,8 @@ app.use(session({
         maxAge: 14 * 24 * 60 * 60 * 1000
     }
 }));
+app.get("/compiler", (req, res) => { if (!req.session.userId) return res.redirect("/login"); return res.sendFile(path.join(staticPath, "compiler.html")); });
+
 app.use(express.static(staticPath, {
     maxAge: process.env.NODE_ENV === "production" ? "1d" : "0",
     setHeaders: (res, filePath) => {
@@ -319,7 +321,6 @@ app.put("/api/questions/progress", requireAuthenticatedUser, async (req, res) =>
 const compilerLimiter = rateLimit({ windowMs: 60 * 1000, limit: 5, standardHeaders: "draft-7", legacyHeaders: false, message: { error: "Too many code runs. Please wait a minute and try again." } });
 const compilerLanguages = { cpp: { id: 54, name: "C++" }, java: { id: 62, name: "Java" }, python: { id: 71, name: "Python" }, javascript: { id: 63, name: "JavaScript" } };
 const decodeJudgeOutput = (value) => value ? Buffer.from(value, "base64").toString("utf8") : "";
-app.get("/compiler", (req, res) => { if (!req.session.userId) return res.redirect("/login"); return res.sendFile(path.join(staticPath, "compiler.html")); });
 app.post("/api/compiler/run", requireAuthenticatedUser, compilerLimiter, async (req, res) => {
   const body = req.body && typeof req.body === "object" ? req.body : {};
   const language = compilerLanguages[body.language];
