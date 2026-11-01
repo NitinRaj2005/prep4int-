@@ -1483,3 +1483,78 @@ nav > ul > li.account-menu > button.account-menu-trigger {
     nav > ul > .brand { font-size: 1.05rem; }
     nav > ul > .brand img { width: 48px; }
 }
+
+
+/* Prep4Int brand restored in the horizontal navbar */
+nav > ul {
+    justify-content: flex-start;
+    padding-left: 22px;
+    padding-right: 225px;
+}
+nav > ul > li.brand {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: 0;
+    margin: 0;
+    min-width: 205px;
+    white-space: nowrap;
+}
+nav > ul > li.brand > a.brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: #fff200;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 29px;
+    font-weight: 800;
+    letter-spacing: -.6px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+nav > ul > li.brand > a.brand-link:hover {
+    color: #fff200;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+}
+nav > ul > li.brand > a.brand-link > img {
+    display: block;
+    width: 70px;
+    height: 56px;
+    object-fit: contain;
+    padding: 0;
+    margin: 0;
+    border-radius: 8px;
+}
+nav > ul > .navi {
+    justify-content: space-evenly;
+    padding-left: 10px;
+}
+nav > ul > .navi > .main-nav-link {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    letter-spacing: -.2px;
+}
+@media (max-width: 1050px) {
+    nav > ul { padding-left: 12px; padding-right: 190px; }
+    nav > ul > li.brand { min-width: 165px; }
+    nav > ul > li.brand > a.brand-link { font-size: 24px; gap: 6px; }
+    nav > ul > li.brand > a.brand-link > img { width: 58px; height: 48px; }
+}
+@media (max-width: 750px) {
+    nav > ul > li.brand { min-width: 135px; }
+    nav > ul > li.brand > a.brand-link { font-size: 20px; }
+    nav > ul > li.brand > a.brand-link > img { width: 48px; height: 42px; }
+}
+@media (max-width: 550px) {
+    nav > ul { padding-left: 5px; padding-right: 65px; }
+    nav > ul > li.brand { min-width: 105px; }
+    nav > ul > li.brand > a.brand-link { font-size: 16px; gap: 4px; }
+    nav > ul > li.brand > a.brand-link > img { width: 38px; height: 36px; }
+}
+@media (max-width: 370px) {
+    nav > ul > li.brand { min-width: 88px; }
+    nav > ul > li.brand > a.brand-link { font-size: 14px; }
+    nav > ul > li.brand > a.brand-link > img { width: 32px; height: 32px; }
+}
