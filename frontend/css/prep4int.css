@@ -1582,3 +1582,47 @@ nav > ul > .navi > .main-nav-link {
     border-radius: 50%;
 }
 .account-avatar > img.account-avatar-photo[hidden] { display: none !important; }
+
+
+/* Solved / unsolved filters for the practice questions page */
+.question-filter-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    margin-top: 14px;
+}
+.question-filter-btn {
+    border: 1px solid rgb(78, 78, 236);
+    border-radius: 22px;
+    padding: 8px 17px;
+    background: #fff;
+    color: rgb(65, 65, 205);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+.question-filter-btn:hover {
+    background: #eeeeff;
+    transform: translateY(-1px);
+}
+.question-filter-btn.active {
+    background: rgb(78, 78, 236);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(45,45,140,.18);
+}
+.question-filter-btn:focus-visible {
+    outline: 3px solid rgba(78,78,236,.3);
+    outline-offset: 2px;
+}
+.question-search [hidden],
+.quegrid-item[hidden],
+.aman11 li[hidden] {
+    display: none !important;
+}
+@media (max-width: 480px) {
+    .question-filter-controls { gap: 7px; }
+    .question-filter-btn { padding: 7px 12px; font-size: 13px; }
+}
