@@ -24,6 +24,8 @@ $("username-form").addEventListener("submit",async e=>{e.preventDefault();const 
 $("password-form").addEventListener("submit",async e=>{e.preventDefault();const form=e.currentTarget;busy(form,true);feedback($("password-feedback"),"Updating…");try{const r=await fetch("/api/profile/password",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({currentPassword:$("current-password").value,newPassword:$("new-password").value,confirmPassword:$("confirm-password").value})}),d=await r.json();if(!r.ok)throw Error(d.error||"Unable to change password.");form.reset();feedback($("password-feedback"),d.message,"success")}catch(err){feedback($("password-feedback"),err.message,"error")}finally{busy(form,false)}});
 
 const photoInput=$("profile-photo-input");
+const photoTrigger=$("profile-photo-trigger");
+if(photoTrigger&&photoInput)photoTrigger.addEventListener("click",()=>photoInput.click());
 const photoPreview=$("profile-photo-preview");
 const photoIcon=$("profile-avatar-icon");
 const removePhoto=$("remove-profile-photo");
