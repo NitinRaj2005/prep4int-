@@ -385,3 +385,124 @@
     .profile-identity h2 { font-size: 18px; }
     .profile-meta-item { font-size: 13px; }
 }
+
+
+/* Final profile intro alignment and icon-only photo actions */
+.profile-intro {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    min-height: 150px;
+    padding: 22px 28px;
+}
+.profile-avatar-wrap {
+    position: relative;
+    width: 132px;
+    height: 132px;
+    flex: 0 0 132px;
+    margin: 0;
+}
+.profile-avatar-photo {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.profile-avatar-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 32%;
+    border-radius: 50%;
+}
+.profile-identity {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 0;
+}
+.profile-identity h2 {
+    margin: 0 0 10px;
+    line-height: 1.18;
+}
+.profile-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+}
+.profile-meta-item {
+    margin: 0;
+    line-height: 1.3;
+}
+.profile-photo-edit,
+.profile-photo-remove {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    background: rgb(78,78,236);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    cursor: pointer;
+    transition: transform .15s ease, background .15s ease;
+}
+.profile-photo-edit {
+    right: -1px;
+    bottom: 8px;
+}
+.profile-photo-remove {
+    right: -1px;
+    top: 8px;
+    background: #d94343;
+}
+.profile-photo-edit:hover,
+.profile-photo-remove:hover {
+    transform: scale(1.08);
+    filter: brightness(.94);
+}
+.profile-photo-edit[hidden],
+.profile-photo-remove[hidden] { display: none !important; }
+.profile-feedback { display: none !important; }
+@media (max-width: 700px) {
+    .profile-intro {
+        align-items: center;
+        gap: 17px;
+        min-height: 0;
+        padding: 17px;
+    }
+    .profile-avatar-wrap {
+        width: 105px;
+        height: 105px;
+        flex-basis: 105px;
+    }
+    .profile-identity {
+        flex: 1 1 0;
+    }
+    .profile-identity h2 { font-size: 21px; }
+}
+@media (max-width: 450px) {
+    .profile-intro { gap: 13px; padding: 14px; }
+    .profile-avatar-wrap {
+        width: 84px;
+        height: 84px;
+        flex-basis: 84px;
+    }
+    .profile-photo-edit,
+    .profile-photo-remove {
+        width: 31px;
+        height: 31px;
+        border-width: 2px;
+    }
+    .profile-identity h2 { font-size: 18px; }
+    .profile-meta-item { font-size: 12px; }
+}
