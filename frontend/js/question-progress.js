@@ -28,20 +28,30 @@
 
     const solvedIds = new Set();
 
+    let activeFilter = "all";
+    const filterButtons = Array.from(document.querySelectorAll("[data-question-filter]"));
+
     const filterQuestions = () => {
         const query = searchInput.value.trim().toLocaleLowerCase();
         let visibleCount = 0;
+        let solvedVisibleCount = 0;
         const visibleByCategory = new Map();
 
-        entries.forEach(({ item }) => {
+        entries.forEach(({ item, questionId }) => {
             const category = item.closest(".quegrid-item");
             const categoryName = category.querySelector(".aman1 h1").textContent;
             const questionName = item.querySelector("a").textContent;
-            const matches = `${categoryName} ${questionName}`.toLocaleLowerCase().includes(query);
+            const matchesSearch = `${categoryName} ${questionName}`.toLocaleLowerCase().includes(query);
+            const isSolved = solvedIds.has(questionId);
+            const matchesFilter = activeFilter === "all"
+                || (activeFilter === "solved" && isSolved)
+                || (activeFilter === "unsolved" && !isSolved);
+            const visible = matchesSearch && matchesFilter;
 
-            item.hidden = !matches;
-            if (matches) {
+            item.hidden = !visible;
+            if (visible) {
                 visibleCount += 1;
+                if (isSolved) solvedVisibleCount += 1;
                 visibleByCategory.set(category, (visibleByCategory.get(category) || 0) + 1);
             }
         });
@@ -49,12 +59,23 @@
         document.querySelectorAll(".quegrid-item").forEach((category) => {
             category.hidden = !visibleByCategory.has(category);
         });
-        searchStatus.textContent = query
-            ? `${visibleCount} of ${entries.length} questions found.`
-            : `${entries.length} questions available.`;
+
+        const filterLabel = activeFilter === "all" ? "questions" : activeFilter + " questions";
+        searchStatus.textContent = `${visibleCount} ${filterLabel} shown • ${solvedVisibleCount} solved`;
     };
 
     searchInput.addEventListener("input", filterQuestions);
+    filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            activeFilter = button.dataset.questionFilter;
+            filterButtons.forEach((filterButton) => {
+                const selected = filterButton === button;
+                filterButton.classList.toggle("active", selected);
+                filterButton.setAttribute("aria-pressed", String(selected));
+            });
+            filterQuestions();
+        });
+    });
     filterQuestions();
 
     const setControlsEnabled = (enabled) => {
@@ -84,6 +105,7 @@
                 checkbox.addEventListener("change", () => updateQuestion(item, questionId, checkbox));
             });
             setControlsEnabled(true);
+            filterQuestions();
         } catch (error) {
             console.error("Unable to initialize question progress:", error);
         }
@@ -108,6 +130,7 @@
             data.solvedQuestionIds.forEach((id) => solvedIds.add(id));
             checkbox.checked = solvedIds.has(questionId);
             item.classList.toggle("question-solved", checkbox.checked);
+            filterQuestions();
         } catch (error) {
             checkbox.checked = wasSolved;
             item.classList.toggle("question-solved", wasSolved);
