@@ -39,6 +39,12 @@ const employeeSchema = new mongoose.Schema({
     solvedQuestions: {
         type: [String],
         default: []
+    },
+    profilePhoto: {
+        type: String,
+        default: "",
+        maxlength: 600000,
+        select: false
     }
 });
 
