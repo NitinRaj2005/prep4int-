@@ -23,6 +23,13 @@
         label.append(checkbox, document.createTextNode(" Solved"));
         item.append(label);
 
+        const solveLink = document.createElement("a");
+        solveLink.className = "question-solve-link";
+        solveLink.href = `/compiler?question=${encodeURIComponent(link.textContent.trim())}&topic=${encodeURIComponent(category)}`;
+        solveLink.textContent = "Solve Here";
+        solveLink.setAttribute("aria-label", `Open compiler for ${link.textContent.trim()}`);
+        item.append(solveLink);
+
         return { item, questionId, checkbox };
     });
 
