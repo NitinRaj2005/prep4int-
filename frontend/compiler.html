@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prep4Int | Online Compiler</title>
+<link rel="icon" href="/img/fevi.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="/css/compiler.css?v=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+</head>
+<body>
+<nav class="compiler-nav">
+<a class="brand" href="/que.html"><img src="/img/logo.png" alt=""> <span>Prep4Int</span></a>
+<a class="back-link" href="/que.html"><i class="fa-solid fa-arrow-left"></i> Back to Questions</a>
+</nav>
+<main class="compiler-shell">
+<header class="compiler-heading">
+<div><p class="eyebrow">PRACTICE WORKSPACE</p><h1>Online Compiler</h1><p id="question-context">Write, run and test your code.</p></div>
+<span class="secure-note"><i class="fa-solid fa-shield-halved"></i> Sandboxed execution</span>
+</header>
+<section class="workspace">
+<div class="editor-panel">
+<div class="panel-toolbar">
+<div class="language-control"><label for="language-select">Language</label><select id="language-select"><option value="cpp">C++</option><option value="java">Java</option><option value="python">Python</option><option value="javascript">JavaScript</option></select></div>
+<div class="editor-actions"><button id="reset-code" class="secondary-btn" type="button"><i class="fa-solid fa-rotate-left"></i> Reset</button><button id="run-code" class="run-btn" type="button"><i class="fa-solid fa-play"></i> Run Code</button></div>
+</div>
+<div id="code-editor" aria-label="Code editor"></div>
+</div>
+<aside class="input-panel">
+<div class="panel-title"><i class="fa-solid fa-keyboard"></i> Custom Input <span>STDIN</span></div>
+<textarea id="custom-input" placeholder="Enter input here..."></textarea>
+<div class="input-hint">Input is passed to your program through standard input.</div>
+</aside>
+</section>
+<section class="output-panel">
+<div class="output-heading"><h2><i class="fa-solid fa-terminal"></i> Output</h2><span id="run-status">Ready</span></div>
+<pre id="output-content" aria-live="polite">Your program output will appear here.</pre>
+<div class="execution-meta" id="execution-meta"></div>
+</section>
+<p class="privacy-note"><i class="fa-solid fa-circle-info"></i> When you run code, your source code and custom input are sent to Judge0 for execution. Do not submit passwords, API keys or other secrets.</p>
+</main>
+<script src="/js/compiler.js?v=1" defer></script>
+</body>
+</html>
