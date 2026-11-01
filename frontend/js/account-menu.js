@@ -29,6 +29,31 @@
         if (event.target.closest("a")) closeMenu();
     });
 
+
+    document.addEventListener("profile-photo-updated", (event) => {
+        const hasPhoto = Boolean(event.detail && event.detail.hasPhoto);
+        document.querySelectorAll(".account-avatar").forEach((avatar) => {
+            const icon = avatar.querySelector("i");
+            let photo = avatar.querySelector("img.account-avatar-photo");
+            if (!photo) {
+                photo = document.createElement("img");
+                photo.className = "account-avatar-photo";
+                photo.alt = "";
+                photo.hidden = true;
+                photo.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:50%;";
+                avatar.appendChild(photo);
+            }
+            if (hasPhoto) {
+                photo.onload = () => { photo.hidden = false; if (icon) icon.hidden = true; };
+                photo.onerror = () => { photo.hidden = true; if (icon) icon.hidden = false; };
+                photo.src = "/api/profile/photo?v=" + Date.now();
+            } else {
+                photo.hidden = true;
+                if (icon) icon.hidden = false;
+            }
+        });
+    });
+
     fetch("/api/profile/summary", { credentials: "same-origin" })
         .then((response) => {
             if (!response.ok) throw new Error("Account details unavailable");
