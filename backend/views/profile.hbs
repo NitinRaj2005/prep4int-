@@ -64,6 +64,9 @@
                 <button class="profile-photo-edit" id="profile-photo-trigger" type="button" aria-label="Change profile photo" title="Change profile photo">
                     <i class="fa-solid fa-camera"></i>
                 </button>
+                <button class="profile-photo-remove" id="remove-profile-photo" type="button" aria-label="Remove profile photo" title="Remove profile photo" hidden>
+                    <i class="fa-solid fa-trash"></i>
+                </button>
                 <input id="profile-photo-input" type="file" accept="image/jpeg,image/png,image/webp" hidden>
             </div>
             <div class="profile-identity">
@@ -72,10 +75,7 @@
                     <p class="profile-meta-item"><i class="fa-solid fa-at"></i><span id="profile-username">{{user.username}}</span></p>
                     <p class="profile-meta-item"><i class="fa-solid fa-envelope"></i><span>{{user.email}}</span></p>
                 </div>
-                <div class="profile-photo-actions">
-                    <button class="profile-photo-remove" id="remove-profile-photo" type="button" hidden><i class="fa-solid fa-trash"></i> Remove photo</button>
-                    <p id="photo-feedback" class="profile-feedback" role="status"></p>
-                </div>
+                <p id="photo-feedback" class="profile-feedback" role="status"></p>
             </div>
             <a class="profile-link" href="/index">Go to Home</a>
         </section>
