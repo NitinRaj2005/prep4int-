@@ -119,6 +119,70 @@ app.get("/index", (req, res) => {
 app.get("/login", (req, res) => {
     res.render("login");
 });
+app.get("/profile", async (req, res) => {
+    if (!req.session.userId) return res.redirect("/login");
+    try {
+        const user = await Register.findById(req.session.userId).select("fullname username email phone");
+        if (!user) { req.session.destroy(() => {}); return res.redirect("/login"); }
+        return res.render("profile", { user });
+    } catch (error) {
+        console.error("Loading profile failed:", error.message);
+        return res.status(500).send("Unable to load your profile right now.");
+    }
+});
+
+app.put("/api/profile/username", requireAuthenticatedUser, async (req, res) => {
+    const username = cleanString(req.body && req.body.username).toLowerCase();
+    if (!/^[a-z0-9_-]{3,30}$/.test(username)) {
+        return res.status(400).json({ error: "Username must be 3-30 characters and use only letters, numbers, _ or -." });
+    }
+    try {
+        const existing = await Register.findOne({ username }).collation({ locale: "en", strength: 2 }).select("_id");
+        if (existing && existing._id.toString() !== req.session.userId) {
+            return res.status(409).json({ error: "That username is already taken." });
+        }
+        const user = await Register.findById(req.session.userId);
+        if (!user) { req.session.destroy(() => {}); return res.status(401).json({ error: "Please log in again." }); }
+        user.username = username;
+        await user.save();
+        return res.json({ message: "Username updated successfully.", username: user.username });
+    } catch (error) {
+        if (error && error.code === 11000) return res.status(409).json({ error: "That username is already taken." });
+        console.error("Updating username failed:", error.message);
+        return res.status(500).json({ error: "Unable to update username right now." });
+    }
+});
+
+app.put("/api/profile/password", requireAuthenticatedUser, async (req, res) => {
+    const body = req.body && typeof req.body === "object" ? req.body : {};
+    const currentPassword = typeof body.currentPassword === "string" ? body.currentPassword : "";
+    const newPassword = typeof body.newPassword === "string" ? body.newPassword : "";
+    const confirmPassword = typeof body.confirmPassword === "string" ? body.confirmPassword : "";
+    if (!currentPassword || currentPassword.length > 128) return res.status(400).json({ error: "Enter your current password." });
+    if (newPassword.length < 12 || newPassword.length > 128) return res.status(400).json({ error: "New password must be 12-128 characters long." });
+    if (newPassword !== confirmPassword) return res.status(400).json({ error: "New password and confirmation do not match." });
+    if (currentPassword === newPassword) return res.status(400).json({ error: "Choose a password different from your current password." });
+    try {
+        const user = await Register.findById(req.session.userId).select("+password");
+        if (!user) { req.session.destroy(() => {}); return res.status(401).json({ error: "Please log in again." }); }
+        let matches = false;
+        if (/^\\$2[aby]\\$/.test(user.password)) {
+            matches = await bcrypt.compare(passwordForBcrypt(currentPassword), user.password);
+        } else {
+            const stored = Buffer.from(user.password);
+            const submitted = Buffer.from(currentPassword);
+            matches = stored.length === submitted.length && crypto.timingSafeEqual(stored, submitted);
+        }
+        if (!matches) return res.status(401).json({ error: "Your current password is incorrect." });
+        user.password = newPassword;
+        await user.save();
+        return res.json({ message: "Password changed successfully." });
+    } catch (error) {
+        console.error("Changing password failed:", error.message);
+        return res.status(500).json({ error: "Unable to change password right now." });
+    }
+});
+
 
 app.get("/api/questions/progress", requireAuthenticatedUser, async (req, res) => {
     try {
