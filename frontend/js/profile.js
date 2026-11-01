@@ -66,14 +66,14 @@ if(photoInput){
         formData.append("profilePhoto",file);
         const label=document.querySelector('label[for="profile-photo-input"]');
         if(label)label.style.opacity=".6";
-        feedback(photoFeedback,"Uploading photo…");
+        if(photoFeedback)photoFeedback.textContent="";
         try{
             const response=await fetch("/api/profile/photo",{method:"POST",body:formData,credentials:"same-origin"});
             const data=await response.json();
             if(!response.ok)throw new Error(data.error||"Unable to upload photo.");
             showProfilePhoto(true);
             document.dispatchEvent(new CustomEvent("profile-photo-updated",{detail:{hasPhoto:true}}));
-            feedback(photoFeedback,data.message,"success");
+            if(photoFeedback)photoFeedback.textContent="";
         }catch(error){feedback(photoFeedback,error.message,"error")}
         finally{if(label)label.style.opacity="";photoInput.value=""}
     });
@@ -81,7 +81,7 @@ if(photoInput){
 if(removePhoto){
     removePhoto.addEventListener("click",async()=>{
         removePhoto.disabled=true;
-        feedback(photoFeedback,"Removing photo…");
+        if(photoFeedback)photoFeedback.textContent="";
         try{
             const response=await fetch("/api/profile/photo",{method:"DELETE",credentials:"same-origin"});
             const data=await response.json();
