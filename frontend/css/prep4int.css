@@ -1626,3 +1626,24 @@ nav > ul > .navi > .main-nav-link {
     .question-filter-controls { gap: 7px; }
     .question-filter-btn { padding: 7px 12px; font-size: 13px; }
 }
+
+
+.question-solve-link {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 12px;
+    padding: 5px 11px;
+    border-radius: 7px;
+    background: #4e4eec;
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 700;
+    text-decoration: none;
+}
+.question-solve-link:hover {
+    background: #3535c7;
+    text-decoration: none;
+}
+@media (max-width: 550px) {
+    .question-solve-link { margin: 8px 0 0 8px; }
+}
