@@ -56,10 +56,19 @@
         </header>
 
         <section class="profile-card profile-intro">
-            <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="profile-avatar profile-avatar-photo" id="profile-avatar">
+                <i class="fa-solid fa-user" id="profile-avatar-icon"></i>
+                <img id="profile-photo-preview" alt="Your profile photo" hidden>
+            </div>
             <div class="profile-identity">
                 <h2>{{user.fullname}}</h2>
                 <p>@<span id="profile-username">{{user.username}}</span> · {{user.email}}</p>
+            </div>
+            <div class="profile-photo-actions">
+                <label class="profile-photo-button" for="profile-photo-input"><i class="fa-solid fa-camera"></i> Change Photo</label>
+                <input id="profile-photo-input" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+                <button class="profile-photo-remove" id="remove-profile-photo" type="button" hidden>Remove</button>
+                <p id="photo-feedback" class="profile-feedback" role="status"></p>
             </div>
             <a class="profile-link" href="/index">Go to Home</a>
         </section>
