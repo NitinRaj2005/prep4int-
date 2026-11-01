@@ -119,6 +119,20 @@ app.get("/index", (req, res) => {
 app.get("/login", (req, res) => {
     res.render("login");
 });
+app.get("/api/profile/summary", requireAuthenticatedUser, async (req, res) => {
+    try {
+        const user = await Register.findById(req.session.userId).select("fullname username");
+        if (!user) {
+            req.session.destroy(() => {});
+            return res.status(401).json({ error: "Please log in again." });
+        }
+        return res.json({ fullname: user.fullname, username: user.username });
+    } catch (error) {
+        console.error("Loading account menu failed:", error.message);
+        return res.status(500).json({ error: "Unable to load account details." });
+    }
+});
+
 app.get("/profile", async (req, res) => {
     if (!req.session.userId) return res.redirect("/login");
     try {
