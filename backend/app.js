@@ -316,6 +316,32 @@ app.put("/api/questions/progress", requireAuthenticatedUser, async (req, res) =>
     }
 });
 
+const compilerLimiter = rateLimit({ windowMs: 60 * 1000, limit: 5, standardHeaders: "draft-7", legacyHeaders: false, message: { error: "Too many code runs. Please wait a minute and try again." } });
+const compilerLanguages = { cpp: { id: 54, name: "C++" }, java: { id: 62, name: "Java" }, python: { id: 71, name: "Python" }, javascript: { id: 63, name: "JavaScript" } };
+const decodeJudgeOutput = (value) => value ? Buffer.from(value, "base64").toString("utf8") : "";
+app.get("/compiler", (req, res) => { if (!req.session.userId) return res.redirect("/login"); return res.sendFile(path.join(staticPath, "compiler.html")); });
+app.post("/api/compiler/run", requireAuthenticatedUser, compilerLimiter, async (req, res) => {
+  const body = req.body && typeof req.body === "object" ? req.body : {};
+  const language = compilerLanguages[body.language];
+  const sourceCode = typeof body.sourceCode === "string" ? body.sourceCode : "";
+  const stdin = typeof body.stdin === "string" ? body.stdin : "";
+  if (!language) return res.status(400).json({ error: "Select a supported programming language." });
+  if (!sourceCode.trim()) return res.status(400).json({ error: "Write some code before running it." });
+  if (sourceCode.length > 20000 || stdin.length > 10000) return res.status(413).json({ error: "Code or input is too long." });
+  const judgeUrl = (process.env.JUDGE0_API_URL || "https://ce.judge0.com").replace(/\/$/, "");
+  const controller = new AbortController(); const timeout = setTimeout(() => controller.abort(), 15000);
+  try {
+    const headers = { "Content-Type": "application/json", "Accept": "application/json" };
+    if (process.env.JUDGE0_API_KEY) headers["X-Auth-Token"] = process.env.JUDGE0_API_KEY;
+    const response = await fetch(judgeUrl + "/submissions?base64_encoded=true&wait=true", { method: "POST", headers, signal: controller.signal, body: JSON.stringify({ source_code: Buffer.from(sourceCode, "utf8").toString("base64"), language_id: language.id, stdin: Buffer.from(stdin, "utf8").toString("base64"), cpu_time_limit: 5, wall_time_limit: 10, memory_limit: 128000 }) });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) { console.error("Judge0 request failed:", response.status, result); return res.status(502).json({ error: "Compiler service is temporarily unavailable. Please try again." }); }
+    return res.json({ language: language.name, status: result.status && result.status.description ? result.status.description : "Finished", stdout: decodeJudgeOutput(result.stdout), stderr: decodeJudgeOutput(result.stderr), compileOutput: decodeJudgeOutput(result.compile_output), time: result.time || null, memory: result.memory || null });
+  } catch (error) {
+    if (error.name === "AbortError") return res.status(504).json({ error: "The compiler took too long to respond. Please try again." });
+    console.error("Code execution failed:", error.message); return res.status(502).json({ error: "Unable to connect to the compiler service right now." });
+  } finally { clearTimeout(timeout); }
+});
 app.post("/login", loginLimiter, async (req, res) => {
     try {
         const body = req.body && typeof req.body === "object" ? req.body : {};
