@@ -1647,3 +1647,47 @@ nav > ul > .navi > .main-nav-link {
 @media (max-width: 550px) {
     .question-solve-link { margin: 8px 0 0 8px; }
 }
+
+/* Cleaner practice-question rows: keep titles normal and actions aligned right */
+.aman11 li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    list-style: none;
+    padding: 10px 0;
+}
+.aman11 li::before {
+    content: "•";
+    flex: 0 0 14px;
+    color: #111;
+}
+.aman11 li > a:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-decoration: none;
+    color: blue;
+}
+.aman11 li.question-solved > a:first-child {
+    color: blue;
+    text-decoration: none;
+}
+.question-action-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+.question-solved-control {
+    margin-left: 0;
+}
+.question-solve-link {
+    margin-left: 0;
+    white-space: nowrap;
+}
+@media (max-width: 700px) {
+    .aman11 li { flex-wrap: wrap; gap: 7px; }
+    .aman11 li > a:first-child { flex-basis: calc(100% - 26px); }
+    .question-action-group { margin-left: 22px; }
+}
