@@ -7,12 +7,14 @@ const MongoStore = require("connect-mongo");
 const bcrypt = require("bcryptjs");
 const { rateLimit } = require("express-rate-limit");
 const validator = require("validator");
+const multer = require("multer");
 const passwordForBcrypt = require("./utils/password");
 const { mongoURI, connectToDatabase } = require("./db/db/conn");
 const Register = require("./models/models/registers");
 const ContactUs = require("./models/models/contactus");
 
 const app = express();
+const profilePhotoUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 400 * 1024, files: 1 } });
 const port = process.env.PORT || 8000;
 const staticPath = path.join(__dirname, "../frontend");
 const sessionSecret = process.env.SESSION_SECRET || (
@@ -121,15 +123,85 @@ app.get("/login", (req, res) => {
 });
 app.get("/api/profile/summary", requireAuthenticatedUser, async (req, res) => {
     try {
-        const user = await Register.findById(req.session.userId).select("fullname username");
+        const user = await Register.findById(req.session.userId).select("fullname username profilePhoto");
         if (!user) {
             req.session.destroy(() => {});
             return res.status(401).json({ error: "Please log in again." });
         }
-        return res.json({ fullname: user.fullname, username: user.username });
+        return res.json({ fullname: user.fullname, username: user.username, hasProfilePhoto: Boolean(user.profilePhoto) });
     } catch (error) {
         console.error("Loading account menu failed:", error.message);
         return res.status(500).json({ error: "Unable to load account details." });
+    }
+});
+
+
+app.get("/api/profile/photo", requireAuthenticatedUser, async (req, res) => {
+    try {
+        const user = await Register.findById(req.session.userId).select("+profilePhoto");
+        if (!user || !user.profilePhoto) return res.sendStatus(404);
+        const match = /^data:(image\\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(user.profilePhoto);
+        if (!match) return res.sendStatus(404);
+        res.set({
+            "Content-Type": match[1],
+            "Cache-Control": "private, no-store",
+            "X-Content-Type-Options": "nosniff"
+        });
+        return res.send(Buffer.from(match[2], "base64"));
+    } catch (error) {
+        console.error("Loading profile photo failed:", error.message);
+        return res.status(500).json({ error: "Unable to load profile photo." });
+    }
+});
+
+app.post("/api/profile/photo", requireAuthenticatedUser, (req, res) => {
+    profilePhotoUpload.single("profilePhoto")(req, res, async (uploadError) => {
+        if (uploadError) {
+            const message = uploadError.code === "LIMIT_FILE_SIZE"
+                ? "Photo must be 400 KB or smaller."
+                : "Unable to upload this photo.";
+            return res.status(400).json({ error: message });
+        }
+        if (!req.file) return res.status(400).json({ error: "Choose a photo first." });
+
+        const buffer = req.file.buffer;
+        const isJpeg = buffer.length >= 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+        const isPng = buffer.length >= 8 && buffer.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+        const isWebp = buffer.length >= 12 && buffer.toString("ascii", 0, 4) === "RIFF" && buffer.toString("ascii", 8, 12) === "WEBP";
+        if (!(isJpeg || isPng || isWebp)) {
+            return res.status(400).json({ error: "Use a valid JPG, PNG or WEBP image." });
+        }
+
+        const contentType = isJpeg ? "image/jpeg" : isPng ? "image/png" : "image/webp";
+        try {
+            const user = await Register.findById(req.session.userId).select("+profilePhoto");
+            if (!user) {
+                req.session.destroy(() => {});
+                return res.status(401).json({ error: "Please log in again." });
+            }
+            user.profilePhoto = `data:${contentType};base64,${buffer.toString("base64")}`;
+            await user.save();
+            return res.json({ message: "Profile photo updated successfully." });
+        } catch (error) {
+            console.error("Saving profile photo failed:", error.message);
+            return res.status(500).json({ error: "Unable to save profile photo right now." });
+        }
+    });
+});
+
+app.delete("/api/profile/photo", requireAuthenticatedUser, async (req, res) => {
+    try {
+        const user = await Register.findById(req.session.userId).select("+profilePhoto");
+        if (!user) {
+            req.session.destroy(() => {});
+            return res.status(401).json({ error: "Please log in again." });
+        }
+        user.profilePhoto = "";
+        await user.save();
+        return res.json({ message: "Profile photo removed." });
+    } catch (error) {
+        console.error("Removing profile photo failed:", error.message);
+        return res.status(500).json({ error: "Unable to remove profile photo." });
     }
 });
 
