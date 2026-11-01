@@ -977,3 +977,115 @@ div.aman11 li{
         font-size: 0.5rem;
     }
 }
+
+
+/* Account dropdown shared across all signed-in Prep4Int pages */
+ul li.lioful { right: 76px; }
+.account-menu {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    z-index: 1001;
+}
+.account-menu-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 5px 11px;
+    border: 1px solid rgba(255,255,255,.55);
+    border-radius: 24px;
+    background: rgba(255,255,255,.14);
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+}
+.account-menu-trigger:hover,
+.account-menu-trigger[aria-expanded="true"] {
+    background: rgba(255,255,255,.27);
+    transform: translateY(-1px);
+}
+.account-avatar {
+    width: 29px;
+    height: 29px;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 29px;
+    border-radius: 50%;
+    background: #fff;
+    color: rgb(78,78,236);
+}
+.account-chevron { font-size: 11px; transition: transform .2s ease; }
+.account-menu-trigger[aria-expanded="true"] .account-chevron { transform: rotate(180deg); }
+.account-dropdown {
+    position: absolute;
+    top: 57px;
+    right: 0;
+    width: 235px;
+    padding: 8px 0;
+    margin: 0;
+    list-style: none;
+    border: 1px solid #e4d7c4;
+    border-radius: 12px;
+    background: #fffdf8;
+    box-shadow: 0 10px 28px rgba(28, 24, 48, .2);
+    overflow: hidden;
+    z-index: 1100;
+}
+.account-dropdown[hidden] { display: none !important; }
+.account-dropdown li { display: block; padding: 0; background: transparent; }
+.account-dropdown .account-menu-header {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 12px 14px;
+    color: #29243a;
+}
+.account-menu-header > span:last-child { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.account-menu-header strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+.account-menu-header small { color: #777; font-size: 12px; }
+.account-avatar-large { width: 38px; height: 38px; flex-basis: 38px; background: #e9eaff; font-size: 16px; }
+.account-dropdown .account-menu-divider {
+    height: 1px;
+    margin: 5px 0;
+    padding: 0;
+    background: #eee6da;
+}
+ul li.account-menu ul.account-dropdown li a {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 15px;
+    color: #332d25;
+    text-align: left;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background .15s ease, color .15s ease;
+}
+ul li.account-menu ul.account-dropdown li a i { width: 17px; color: rgb(78,78,236); }
+ul li.account-menu ul.account-dropdown li a:hover {
+    color: rgb(55,55,190);
+    background: #f0f0ff;
+    box-shadow: none;
+    border: 0;
+    border-radius: 0;
+    transform: none;
+}
+ul li.account-menu ul.account-dropdown li a.account-logout,
+ul li.account-menu ul.account-dropdown li a.account-logout i { color: #c0392b; }
+@media (max-width: 550px) {
+    ul li.lioful { right: 62px; }
+    .account-menu { right: 5px; }
+    .account-menu-trigger { gap: 5px; padding: 5px 8px; }
+    .account-trigger-name { display: none; }
+    .account-dropdown { width: 220px; }
+}
+@media (max-width: 370px) {
+    ul li.lioful { right: 55px; }
+    .account-menu-trigger { min-height: 38px; padding: 4px 6px; }
+}
