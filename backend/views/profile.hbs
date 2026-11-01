@@ -25,8 +25,26 @@
                     <li><a href="/alltopics.html">Topics</a></li>
                     <li><a href="/rec.html">Recomm.</a></li>
                     <li><a href="/que.html">Questions</a></li>
-                    <li><a href="/profile">My Profile</a></li>
-                    <li><a href="/logout">Log Out</a></li>
+                </ul>
+            </li>
+                    <li class="account-menu">
+                <button class="account-menu-trigger" type="button" aria-expanded="false" aria-controls="account-dropdown">
+                    <span class="account-avatar"><i class="fa-solid fa-user"></i></span>
+                    <span class="account-trigger-name" id="account-trigger-name">Account</span>
+                    <i class="fa-solid fa-chevron-down account-chevron"></i>
+                </button>
+                <ul class="account-dropdown" id="account-dropdown" hidden>
+                    <li class="account-menu-header">
+                        <span class="account-avatar account-avatar-large"><i class="fa-solid fa-user"></i></span>
+                        <span><strong id="account-fullname">Your account</strong><small id="account-username">@username</small></span>
+                    </li>
+                    <li class="account-menu-divider" aria-hidden="true"></li>
+                    <li><a href="/index"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                    <li><a href="/profile"><i class="fa-solid fa-user-pen"></i> My Profile</a></li>
+                    <li><a href="/profile#dsa-progress"><i class="fa-solid fa-chart-simple"></i> My Progress</a></li>
+                    <li><a href="/que.html"><i class="fa-solid fa-code"></i> DSA Questions</a></li>
+                    <li class="account-menu-divider" aria-hidden="true"></li>
+                    <li><a class="account-logout" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
                 </ul>
             </li>
         </ul>
@@ -47,7 +65,7 @@
             <a class="profile-link" href="/index">Go to Home</a>
         </section>
 
-        <section class="profile-section">
+        <section class="profile-section" id="dsa-progress">
             <div class="profile-section-heading">
                 <h2>DSA Progress</h2>
                 <a href="/que.html">Practice Questions <i class="fa-solid fa-arrow-right"></i></a>
@@ -79,7 +97,7 @@
             <p id="progress-error" class="profile-feedback" role="status"></p>
         </section>
 
-        <section class="profile-section">
+        <section class="profile-section" id="account-settings">
             <h2 class="profile-section-title">Account Settings</h2>
             <div class="profile-settings">
                 <article class="profile-card profile-setting">
@@ -113,5 +131,6 @@
         <footer class="profile-footer">Prep4Int · Keep learning, keep improving.</footer>
     </main>
     <script src="/js/profile.js" defer></script>
+    <script src="/js/account-menu.js" defer></script>
 </body>
 </html>
