@@ -21,14 +21,17 @@
         checkbox.disabled = true;
         checkbox.setAttribute("aria-label", `Mark ${link.textContent.trim()} as solved`);
         label.append(checkbox, document.createTextNode(" Solved"));
-        item.append(label);
+        const actionGroup = document.createElement("div");
+        actionGroup.className = "question-action-group";
+        actionGroup.append(label);
 
         const solveLink = document.createElement("a");
         solveLink.className = "question-solve-link";
         solveLink.href = `/compiler?question=${encodeURIComponent(link.textContent.trim())}&topic=${encodeURIComponent(category)}`;
         solveLink.textContent = "Solve Here";
         solveLink.setAttribute("aria-label", `Open compiler for ${link.textContent.trim()}`);
-        item.append(solveLink);
+        actionGroup.append(solveLink);
+        item.append(actionGroup);
 
         return { item, questionId, checkbox };
     });
