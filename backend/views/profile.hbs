@@ -1,15 +1,117 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Profile | Prep4Int</title><link rel="stylesheet" href="/css/profile.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link rel="icon" href="/img/fevi.png"></head>
-<body>
-<nav class="topbar"><a class="brand" href="/index"><img src="/img/logo.png" alt="">Prep4Int</a><div class="links"><a href="/index">Home</a><a href="/alltopics.html">Topics</a><a href="/que.html">Questions</a><a href="/rec.html">Recommendations</a></div><a class="logout" href="/logout">Log out</a></nav>
-<main class="wrap">
-<header class="heading"><p class="eyebrow">YOUR SPACE</p><h1>My Profile</h1><p class="muted">Manage your account and track your DSA journey.</p></header>
-<section class="hero card"><div class="avatar"><i class="fa-solid fa-user"></i></div><div class="identity"><p class="eyebrow">WELCOME BACK</p><h2>{{user.fullname}}</h2><p class="muted">@<span id="profile-username">{{user.username}}</span> · {{user.email}}</p></div><a class="outline" href="/index">Dashboard <i class="fa-solid fa-arrow-up-right-from-square"></i></a></section>
-<section class="section"><div class="section-head"><div><p class="eyebrow">YOUR PERFORMANCE</p><h2>DSA Progress</h2><p class="muted">Your saved question progress, all in one place.</p></div><a class="text-link" href="/que.html">Practice questions <i class="fa-solid fa-arrow-right"></i></a></div>
-<div class="stats"><article class="stat card"><span class="icon green"><i class="fa-solid fa-circle-check"></i></span><p class="muted">Solved</p><strong id="solved-count">—</strong></article><article class="stat card"><span class="icon blue"><i class="fa-solid fa-list-check"></i></span><p class="muted">Total questions</p><strong id="total-count">—</strong></article><article class="stat card"><span class="icon orange"><i class="fa-solid fa-bullseye"></i></span><p class="muted">Remaining</p><strong id="remaining-count">—</strong></article></div>
-<article class="card panel"><div class="progress-head"><div><h3>Overall completion</h3><p class="muted" id="progress-caption">Loading your progress…</p></div><strong id="progress-percent">0%</strong></div><div class="track"><div id="overall-progress" class="fill"></div></div></article>
-<article class="card panel"><h3>Topic-wise progress</h3><p class="muted">See your progress in each DSA topic.</p><div id="topic-progress" class="topic-grid"><span class="muted">Loading topics…</span></div></article><p id="progress-error" class="feedback" role="status"></p></section>
-<section class="section"><div class="section-head"><div><p class="eyebrow">ACCOUNT PREFERENCES</p><h2>Account Settings</h2><p class="muted">Update your login details securely.</p></div></div><div class="settings">
-<article class="card setting"><div class="setting-title"><span class="icon blue"><i class="fa-solid fa-at"></i></span><div><h3>Change username</h3><p class="muted">Choose a unique username.</p></div></div><form id="username-form"><label for="new-username">New username</label><input id="new-username" type="text" minlength="3" maxlength="30" pattern="[A-Za-z0-9_-]{3,30}" value="{{user.username}}" required><small>3–30 characters: letters, numbers, _ and -</small><button type="submit">Save username</button><p id="username-feedback" class="feedback" role="status"></p></form></article>
-<article class="card setting"><div class="setting-title"><span class="icon blue"><i class="fa-solid fa-shield-halved"></i></span><div><h3>Change password</h3><p class="muted">Confirm your current password first.</p></div></div><form id="password-form"><label for="current-password">Current password</label><input id="current-password" type="password" maxlength="128" autocomplete="current-password" required><label for="new-password">New password</label><input id="new-password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required><label for="confirm-password">Confirm new password</label><input id="confirm-password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required><small>Use 12–128 characters.</small><button type="submit">Update password</button><p id="password-feedback" class="feedback" role="status"></p></form></article></div></section>
-<footer>Prep4Int · Keep learning, keep improving.</footer></main><script src="/js/profile.js" defer></script></body></html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Prep4Int</title>
+    <link rel="stylesheet" href="/css/prep4int.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/img/fevi.png">
+</head>
+<body class="profile-page">
+    <nav>
+        <ul>
+            <li class="brand"><img src="/img/logo.png" alt="prep4int"> Prep4Int</li>
+            <div class="navi">
+                <li class="nav1"><a href="/index#about">About</a></li>
+                <li class="nav1"><a href="/index#practise">Practice</a></li>
+                <li class="nav1"><a href="/index#contactus">ContactUs</a></li>
+            </div>
+            <li class="lioful">
+                <a class="insta" href="#"><i class="fa fa-bars"></i></a>
+                <ul class="dropdown">
+                    <li><a href="/index">Home</a></li>
+                    <li><a href="/alltopics.html">Topics</a></li>
+                    <li><a href="/rec.html">Recomm.</a></li>
+                    <li><a href="/que.html">Questions</a></li>
+                    <li><a href="/profile">My Profile</a></li>
+                    <li><a href="/logout">Log Out</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="profile-wrap">
+        <header class="profile-heading">
+            <h1 class="profile-title">My Profile</h1>
+            <p>Manage your account and track your DSA progress.</p>
+        </header>
+
+        <section class="profile-card profile-intro">
+            <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="profile-identity">
+                <h2>{{user.fullname}}</h2>
+                <p>@<span id="profile-username">{{user.username}}</span> · {{user.email}}</p>
+            </div>
+            <a class="profile-link" href="/index">Go to Home</a>
+        </section>
+
+        <section class="profile-section">
+            <div class="profile-section-heading">
+                <h2>DSA Progress</h2>
+                <a href="/que.html">Practice Questions <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="profile-stats">
+                <article class="profile-card profile-stat">
+                    <p>Solved</p><strong id="solved-count">—</strong>
+                </article>
+                <article class="profile-card profile-stat">
+                    <p>Total Questions</p><strong id="total-count">—</strong>
+                </article>
+                <article class="profile-card profile-stat">
+                    <p>Remaining</p><strong id="remaining-count">—</strong>
+                </article>
+            </div>
+            <article class="profile-card profile-panel">
+                <div class="profile-progress-heading">
+                    <h3>Overall Completion</h3>
+                    <strong id="progress-percent">0%</strong>
+                </div>
+                <p id="progress-caption">Loading your progress…</p>
+                <div class="profile-track"><div id="overall-progress" class="profile-fill"></div></div>
+            </article>
+            <article class="profile-card profile-panel">
+                <h3>Topic-wise Progress</h3>
+                <p class="profile-help">Your solved questions in each topic.</p>
+                <div id="topic-progress" class="profile-topic-grid"><span>Loading topics…</span></div>
+            </article>
+            <p id="progress-error" class="profile-feedback" role="status"></p>
+        </section>
+
+        <section class="profile-section">
+            <h2 class="profile-section-title">Account Settings</h2>
+            <div class="profile-settings">
+                <article class="profile-card profile-setting">
+                    <h3><i class="fa-solid fa-user-pen"></i> Change Username</h3>
+                    <p class="profile-help">Choose a unique username for your account.</p>
+                    <form id="username-form">
+                        <label for="new-username">New username</label>
+                        <input id="new-username" type="text" minlength="3" maxlength="30" pattern="[A-Za-z0-9_-]{3,30}" value="{{user.username}}" required>
+                        <small>3–30 characters: letters, numbers, _ and -</small>
+                        <button type="submit">Save Username</button>
+                        <p id="username-feedback" class="profile-feedback" role="status"></p>
+                    </form>
+                </article>
+                <article class="profile-card profile-setting">
+                    <h3><i class="fa-solid fa-lock"></i> Change Password</h3>
+                    <p class="profile-help">Enter your current password to set a new one.</p>
+                    <form id="password-form">
+                        <label for="current-password">Current password</label>
+                        <input id="current-password" type="password" maxlength="128" autocomplete="current-password" required>
+                        <label for="new-password">New password</label>
+                        <input id="new-password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required>
+                        <label for="confirm-password">Confirm new password</label>
+                        <input id="confirm-password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required>
+                        <small>Use 12–128 characters.</small>
+                        <button type="submit">Update Password</button>
+                        <p id="password-feedback" class="profile-feedback" role="status"></p>
+                    </form>
+                </article>
+            </div>
+        </section>
+        <footer class="profile-footer">Prep4Int · Keep learning, keep improving.</footer>
+    </main>
+    <script src="/js/profile.js" defer></script>
+</body>
+</html>
