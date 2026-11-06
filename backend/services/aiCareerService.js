@@ -186,13 +186,17 @@ const normalizeJDAnalysis = (raw, roadmapDays, hasResume) => {
         status: hasResume && ["matched", "needs-improvement", "missing"].includes(item.status) ? item.status : (hasResume ? "not-assessed" : "not-assessed"),
         notes: typeof item.notes === "string" ? item.notes.slice(0, 500) : ""
     })) : [];
-    const roadmap = Array.isArray(raw.roadmap) ? raw.roadmap.slice(0, roadmapDays).map((item, index) => ({
-        day: index + 1,
-        title: typeof item.title === "string" ? item.title.slice(0, 180) : "Preparation task " + (index + 1),
-        description: typeof item.description === "string" ? item.description.slice(0, 1200) : "",
-        topics: strings(item.topics, 10, 100),
-        completed: false
-    })) : [];
+    const sourceRoadmap = Array.isArray(raw.roadmap) ? raw.roadmap.slice(0, roadmapDays) : [];
+    const roadmap = Array.from({ length: roadmapDays }, (_, index) => {
+        const item = sourceRoadmap[index] || {};
+        return {
+            day: index + 1,
+            title: typeof item.title === "string" ? item.title.slice(0, 180) : "Review and practice key role skills",
+            description: typeof item.description === "string" ? item.description.slice(0, 1200) : "Revise the relevant topics, solve practical questions and note areas that need more practice.",
+            topics: strings(item.topics, 10, 100),
+            completed: false
+        };
+    });
     return {
         matchPercentage: hasResume ? bounded(raw.matchPercentage) : 0,
         skills,
