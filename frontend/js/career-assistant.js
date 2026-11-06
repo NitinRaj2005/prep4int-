@@ -155,19 +155,22 @@
         jdForm.addEventListener("submit", async event => {
             event.preventDefault();
             const jobDescription = document.getElementById("jd-text").value.trim();
-            if (jobDescription.length < 100) { jdStatus.textContent = "Please paste a job description with at least 100 characters."; return; }
-            const payload = {
-                company: document.getElementById("jd-company").value.trim(),
-                role: document.getElementById("jd-role").value.trim(),
-                experienceLevel: document.getElementById("jd-level").value,
-                resumeAnalysisId: resumeSelect.value,
-                roadmapDays: Number(daysInput.value),
-                jobDescription
-            };
+            const jdPdf = document.getElementById("jd-pdf").files[0];
+            if (!jdPdf && jobDescription.length < 100) { jdStatus.textContent = "Upload a PDF or paste a job description with at least 100 characters."; return; }
+            if (jdPdf && (jdPdf.type !== "application/pdf" && !jdPdf.name.toLowerCase().endsWith(".pdf"))) { jdStatus.textContent = "Only PDF files are supported."; return; }
+            if (jdPdf && jdPdf.size > 5 * 1024 * 1024) { jdStatus.textContent = "The JD PDF must be 5 MB or smaller."; return; }
+            const payload = new FormData();
+            payload.append("company", document.getElementById("jd-company").value.trim());
+            payload.append("role", document.getElementById("jd-role").value.trim());
+            payload.append("experienceLevel", document.getElementById("jd-level").value);
+            payload.append("resumeAnalysisId", resumeSelect.value);
+            payload.append("roadmapDays", daysInput.value);
+            if (jdPdf) payload.append("jdPdf", jdPdf);
+            else payload.append("jobDescription", jobDescription);
             jdButton.disabled = true;
-            jdStatus.textContent = "Analyzing the job description and creating your preparation roadmap...";
+            jdStatus.textContent = jdPdf ? "Reading the JD PDF and creating your preparation roadmap..." : "Analyzing the job description and creating your preparation roadmap...";
             try {
-                const response = await fetch("/api/career/jd/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+                const response = await fetch("/api/career/jd/analyze", { method: "POST", body: payload });
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || "JD analysis failed.");
                 jdStatus.textContent = data.message || "JD analysis complete.";
