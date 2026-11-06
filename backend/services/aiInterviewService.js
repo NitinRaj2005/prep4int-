@@ -63,8 +63,8 @@ const createInterviewSession = async (userId, setup) => InterviewSession.create(
     category: setup.category,
     difficulty: setup.difficulty,
     mode: setup.mode,
-    durationMinutes: DEFAULT_DURATION_MINUTES,
-    questionLimit: DEFAULT_QUESTION_LIMIT,
+    durationMinutes: setup.durationMinutes || DEFAULT_DURATION_MINUTES,
+    questionLimit: setup.questionLimit || DEFAULT_QUESTION_LIMIT,
     status: "in_progress"
 });
 
