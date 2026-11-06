@@ -1,6 +1,8 @@
 const express = require("express");
 const { rateLimit } = require("express-rate-limit");
 const InterviewSession = require("../models/models/interviewSession");
+const JDPreparation = require("../models/models/jdPreparation");
+const ResumeAnalysis = require("../models/models/resumeAnalysis");
 const { validateStartInterview } = require("../middleware/interviewValidation");
 const {
     createInterviewSession,
@@ -33,7 +35,30 @@ const ownedSession = (id, userId) => InterviewSession.findOne({ _id: id, userId 
 router.post("/start", startInterviewLimiter, validateStartInterview, async (req, res) => {
     let session;
     try {
-        session = await createInterviewSession(req.session.userId, req.interviewSetup);
+        const setup = { ...req.interviewSetup };
+        let jd = null;
+        let resume = null;
+        if (setup.jdPreparationId) {
+            jd = await JDPreparation.findOne({ _id: setup.jdPreparationId, userId: req.session.userId, status: "completed" }).lean();
+            if (!jd) return res.status(404).json({ error: "Selected JD preparation was not found." });
+            setup.role = jd.role;
+        }
+        const resumeId = setup.resumeAnalysisId || (jd && jd.resumeAnalysisId ? String(jd.resumeAnalysisId) : "");
+        if (resumeId) {
+            resume = await ResumeAnalysis.findOne({ _id: resumeId, userId: req.session.userId, status: "completed" }).select("candidate skills projects").lean();
+            if (!resume) return res.status(404).json({ error: "Selected resume analysis was not found." });
+        }
+        setup.preparationContext = jd || resume ? {
+            company: jd ? jd.company : "",
+            jobDescription: jd ? jd.jobDescription.slice(0, 12000) : "",
+            skills: jd ? jd.skills.slice(0, 25).map(item => ({ name: item.name, category: item.category, priority: item.priority, status: item.status })) : [],
+            resumeSkills: resume ? resume.skills.slice(0, 35).map(item => item.name) : [],
+            projects: resume ? resume.projects.slice(0, 8).map(item => ({ name: item.name, description: item.description, technologies: item.technologies })) : [],
+            recommendations: jd ? jd.recommendations.slice(0, 8).map(item => item.text) : []
+        } : {};
+        setup.jdPreparationId = jd ? jd._id : null;
+        setup.resumeAnalysisId = resume ? resume._id : null;
+        session = await createInterviewSession(req.session.userId, setup);
         const question = await generateQuestion(session);
         session.questions.push({ question });
         await session.save();
