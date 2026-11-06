@@ -62,7 +62,20 @@ const callGroq = async (messages, temperature = 0.4, maxCompletionTokens = 500) 
             const content = data.choices && data.choices[0] && data.choices[0].message
                 ? data.choices[0].message.content : "";
             if (!content) throw new Error("The AI service returned an empty response.");
-            return JSON.parse(content);
+            const cleaned = String(content).trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+            try {
+                return JSON.parse(cleaned);
+            } catch (parseError) {
+                const first = cleaned.indexOf("{");
+                const last = cleaned.lastIndexOf("}");
+                if (first >= 0 && last > first) {
+                    try { return JSON.parse(cleaned.slice(first, last + 1)); } catch (_) {}
+                }
+                console.error("Groq returned invalid JSON content:", cleaned.slice(0, 1000));
+                const parseErrorResponse = new Error("The AI response could not be parsed. Please submit the answer again.");
+                parseErrorResponse.statusCode = 502;
+                throw parseErrorResponse;
+            }
         } catch (error) {
             if (error.name === "AbortError") {
                 const timeoutError = new Error("The AI service took too long to respond. Please try again.");
@@ -129,7 +142,7 @@ const generateQuestion = async (session) => {
                 instruction: "Generate the next interview question suitable for this candidate."
             })
         }
-    ], 0.5, 180);
+    ], 0.3, 350);
     if (typeof result.question !== "string" || !result.question.trim()) {
         throw new Error("AI could not generate a valid interview question.");
     }
@@ -140,7 +153,7 @@ const evaluateAnswer = async (session, question, answer) => {
     const result = await callGroq([
         {
             role: "system",
-            content: "You are a fair, constructive interviewer. Evaluate the candidate's answer. Return valid JSON with keys: score (integer 0-10), feedback (string), strengths (array of strings), improvements (array of strings), followUp (string or empty). Be specific, do not reward length alone, and do not invent facts."
+            content: "You are a fair, constructive interviewer. Evaluate the candidate answer. Return ONLY one valid JSON object with exactly these fields: score (integer 0-10), feedback (string), strengths (array of strings), improvements (array of strings), followUp (string). Example: {\"score\":7,\"feedback\":\"Clear explanation\",\"strengths\":[\"Explained the approach\"],\"improvements\":[\"Discuss edge cases\"],\"followUp\":\"What is worst-case complexity?\"}. No markdown, no code fences, no text before or after JSON. Evaluate correctness and clarity. Do not invent facts."
         },
         {
             role: "user",
@@ -149,11 +162,11 @@ const evaluateAnswer = async (session, question, answer) => {
                 category: session.category,
                 difficulty: session.difficulty,
                 question,
-                candidateAnswer: answer,
+                candidateAnswer: String(answer || "").slice(0, 5000),
                 preparationContext: compactPreparationContext(session.preparationContext)
             })
         }
-    ], 0.3, 450);
+    ], 0.2, 900);
     const score = Number(result.score);
     if (!Number.isFinite(score)) throw new Error("AI returned an invalid evaluation.");
     return {
@@ -181,7 +194,7 @@ const createFinalReport = async (session) => {
                 answers: session.questions.slice(-10).map(q => ({ question: q.question, answer: q.answer, score: q.score, feedback: q.feedback }))
             })
         }
-    ], 0.3, 650);
+    ], 0.2, 1200);
     const score = value => Number.isFinite(Number(value)) ? Math.max(0, Math.min(100, Math.round(Number(value)))) : 0;
     const strings = value => Array.isArray(value) ? value.filter(item => typeof item === "string").slice(0, 8) : [];
     return {
