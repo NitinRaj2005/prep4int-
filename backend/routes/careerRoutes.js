@@ -4,6 +4,7 @@ const { rateLimit } = require("express-rate-limit");
 const ResumeAnalysis = require("../models/models/resumeAnalysis");
 const JDPreparation = require("../models/models/jdPreparation");
 const { validateJobDescription, validateRoadmapDays } = require("../middleware/careerValidation");
+const { extractPdfText, analyzeResumeText, normalizeResumeAnalysis } = require("../services/aiCareerService");
 
 const router = express.Router();
 const pdfUpload = multer({
@@ -26,26 +27,67 @@ const validId = (id) => /^[a-f0-9]{24}$/i.test(id);
 
 router.get("/health", (req, res) => res.json({ available: true, phase: 1 }));
 
-// Phase 1 upload foundation: validate the PDF and save metadata only.
-// Text extraction and AI analysis are added in Phase 2; the PDF bytes are never persisted.
-router.post("/resume/upload", careerLimiter, (req, res, next) => {
+// PDF bytes and extracted text stay in memory. Only structured analysis is persisted.
+const resumeUploadLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 5,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    message: { error: "Too many resume analyses. Please try again after 15 minutes." }
+});
+
+router.post("/resume/upload", resumeUploadLimiter, (req, res, next) => {
     pdfUpload.single("resume")(req, res, (error) => {
-        if (error) return res.status(400).json({ error: error.code === "LIMIT_FILE_SIZE" ? "Resume must be 5 MB or smaller." : error.message || "Unable to upload this PDF." });
+        if (error) {
+            const message = error.code === "LIMIT_FILE_SIZE"
+                ? "Resume must be 5 MB or smaller."
+                : error.message || "Unable to upload this PDF.";
+            return res.status(400).json({ error: message });
+        }
         return next();
     });
 }, async (req, res) => {
     if (!req.file || !isPdf(req.file.buffer)) return res.status(400).json({ error: "Choose a valid PDF resume." });
+    let record;
     try {
-        const record = await ResumeAnalysis.create({
+        record = await ResumeAnalysis.create({
             userId: req.session.userId,
             originalFileName: req.file.originalname.replace(/[\\/\\0-\\x1f]/g, "_").slice(0, 180) || "resume.pdf",
             fileSize: req.file.size,
-            status: "uploaded"
+            status: "processing"
         });
-        return res.status(201).json({ message: "Resume received. AI analysis will be enabled in the next phase.", resume: { id: record._id, fileName: record.originalFileName, status: record.status, createdAt: record.createdAt } });
+        const extractedText = await extractPdfText(req.file.buffer);
+        const rawAnalysis = await analyzeResumeText(extractedText);
+        const analysis = normalizeResumeAnalysis(rawAnalysis);
+        record.set({ ...analysis, status: "completed", analyzedAt: new Date(), errorMessage: "" });
+        await record.save();
+        return res.status(201).json({
+            message: "Your resume has been analyzed successfully.",
+            resume: {
+                id: record._id,
+                fileName: record.originalFileName,
+                status: record.status,
+                overallScore: record.overallScore,
+                candidate: record.candidate,
+                skills: record.skills,
+                projects: record.projects,
+                missingSkills: record.missingSkills,
+                interviewQuestions: record.interviewQuestions,
+                feedback: record.feedback,
+                createdAt: record.createdAt,
+                analyzedAt: record.analyzedAt
+            }
+        });
     } catch (error) {
-        console.error("Saving resume metadata failed:", error.message);
-        return res.status(500).json({ error: "Unable to save resume details." });
+        console.error("Resume analysis failed:", error.message);
+        if (record) {
+            record.status = "failed";
+            record.errorMessage = error.message.slice(0, 500);
+            await record.save().catch(saveError => console.error("Saving resume failure status failed:", saveError.message));
+        }
+        return res.status(error.statusCode || 500).json({ error: error.statusCode ? error.message : "Unable to analyze this resume. Please try again." });
+    } finally {
+        if (req.file?.buffer) req.file.buffer.fill(0);
     }
 });
 
