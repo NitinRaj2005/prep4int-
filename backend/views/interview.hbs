@@ -64,6 +64,11 @@
         <form id="interview-setup-form">
           <label for="interview-role">Target role</label>
           <input id="interview-role" name="role" type="text" maxlength="80" placeholder="e.g. Software Developer" value="Software Developer" required>
+          <div class="interview-field-grid tailored-context-fields">
+            <div><label for="interview-jd">Prepare for a saved job description (optional)</label><select id="interview-jd" name="jdPreparationId"><option value="">General interview</option></select></div>
+            <div><label for="interview-resume">Use analyzed resume (optional)</label><select id="interview-resume" name="resumeAnalysisId"><option value="">No resume context</option></select></div>
+          </div>
+          <p class="interview-context-hint">Choose a JD and/or resume to personalize questions, evaluation and your final report.</p>
 
           <div class="interview-field-grid">
             <div>
