@@ -36,3 +36,14 @@ body{background:rgb(242,229,210)}
 .resume-history-item{display:flex;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid #edf1ef;font-size:13px}
 .resume-history-item button{border:0;background:none;color:#168a75;font-weight:700;cursor:pointer}
 @media(max-width:650px){.resume-result-grid{grid-template-columns:1fr}.resume-results,.resume-history{padding:18px}.resume-history-item{align-items:flex-start;flex-direction:column}}
+
+.resume-score-breakdown{max-width:680px;margin:18px 0 24px;padding:16px;border-radius:12px;background:#f7fbf9}
+.resume-score-breakdown h3{margin:0 0 14px;color:#263b34;font-size:15px}
+.score-row{display:grid;grid-template-columns:150px minmax(80px,1fr) 58px;align-items:center;gap:12px;margin:11px 0;color:#53645e;font-size:12px}
+.score-row strong{text-align:right;color:#187c69}
+.score-track{height:8px;overflow:hidden;border-radius:10px;background:#e2ece8}
+.score-track span{display:block;height:100%;border-radius:10px;background:#1abc9c}
+.resume-skill{margin:0 6px 8px 0;display:inline-flex;flex-direction:column;vertical-align:top;max-width:100%;gap:2px}
+.resume-skill .resume-chip{margin:0}
+.resume-skill small{max-width:230px;padding:0 5px;color:#74827d;font-size:10px;line-height:1.4}
+@media(max-width:520px){.score-row{grid-template-columns:110px minmax(50px,1fr) 48px;gap:7px;font-size:11px}}
