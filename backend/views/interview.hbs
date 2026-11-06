@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Mock Interview | Prep4Int</title>
+  <link rel="stylesheet" href="/css/prep4int.css">
+  <link rel="stylesheet" href="/css/interview.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li class="brand"><a class="brand-link" href="/index"><img src="/img/logo.png" alt="Prep4Int logo"><span>Prep4Int</span></a></li>
+      <div class="navi" aria-label="Main navigation">
+        <a class="main-nav-link" href="/index"><i class="fa-solid fa-house"></i><span>Home</span></a>
+        <a class="main-nav-link" href="/alltopics.html"><i class="fa-solid fa-layer-group"></i><span>Topics</span></a>
+        <a class="main-nav-link" href="/que.html"><i class="fa-solid fa-code"></i><span>Practice Questions</span></a>
+        <a class="main-nav-link" href="/interview"><i class="fa-solid fa-robot"></i><span>AI Interview</span></a>
+      </div>
+      <li class="account-menu">
+        <a class="main-nav-link" href="/profile"><i class="fa-solid fa-user"></i><span>My Profile</span></a>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="interview-wrap">
+    <header class="interview-heading">
+      <span class="interview-kicker"><i class="fa-solid fa-sparkles"></i> PREP4INT AI</span>
+      <h1>AI Mock Interview</h1>
+      <p>Practice interview skills with a structured, personalised session.</p>
+    </header>
+
+    <section class="interview-layout">
+      <article class="interview-card setup-card">
+        <div class="card-heading">
+          <span class="heading-icon"><i class="fa-solid fa-sliders"></i></span>
+          <div><h2>Set up your interview</h2><p>Choose the role and the areas you want to practise.</p></div>
+        </div>
+        <form id="interview-setup-form">
+          <label for="interview-role">Target role</label>
+          <input id="interview-role" name="role" type="text" maxlength="80" placeholder="e.g. Software Developer" value="Software Developer" required>
+
+          <div class="interview-field-grid">
+            <div>
+              <label for="interview-category">Interview category</label>
+              <select id="interview-category" name="category">
+                <option value="Mixed">Mixed (Recommended)</option>
+                <option value="DSA">Data Structures & Algorithms</option>
+                <option value="OOP">Object-Oriented Programming</option>
+                <option value="DBMS">DBMS</option>
+                <option value="OS">Operating Systems</option>
+                <option value="CN">Computer Networks</option>
+                <option value="HR">HR</option>
+                <option value="Resume-based">Resume-based</option>
+              </select>
+            </div>
+            <div>
+              <label for="interview-difficulty">Difficulty</label>
+              <select id="interview-difficulty" name="difficulty">
+                <option>Easy</option><option selected>Medium</option><option>Hard</option>
+              </select>
+            </div>
+          </div>
+
+          <label>Interview mode</label>
+          <div class="mode-options">
+            <label class="mode-option"><input type="radio" name="mode" value="text"><span><i class="fa-regular fa-message"></i> Text</span></label>
+            <label class="mode-option"><input type="radio" name="mode" value="voice"><span><i class="fa-solid fa-microphone"></i> Voice</span></label>
+            <label class="mode-option"><input type="radio" name="mode" value="both" checked><span><i class="fa-solid fa-comments"></i> Both</span></label>
+          </div>
+
+          <div class="session-summary">
+            <div><strong>30 min</strong><span>Duration</span></div>
+            <div><strong>10</strong><span>Main questions</span></div>
+            <div><strong>Detailed</strong><span>AI report</span></div>
+          </div>
+
+          <button class="start-interview-btn" id="start-interview-btn" type="submit">
+            <i class="fa-solid fa-play"></i> Create interview session
+          </button>
+          <p id="interview-setup-status" class="interview-status" role="status" aria-live="polite"></p>
+        </form>
+      </article>
+
+      <aside class="interview-side">
+        <article class="interview-card info-card">
+          <span class="side-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+          <h2>How it works</h2>
+          <ol>
+            <li><span>1</span>Choose your target role and interview category.</li>
+            <li><span>2</span>Start a 30-minute practice session.</li>
+            <li><span>3</span>Answer questions using text or voice.</li>
+            <li><span>4</span>Review your detailed performance report.</li>
+          </ol>
+        </article>
+        <article class="interview-card history-card">
+          <div class="history-heading"><h2>Recent sessions</h2><button type="button" id="refresh-history" aria-label="Refresh interview history"><i class="fa-solid fa-rotate"></i></button></div>
+          <div id="interview-history" class="history-list"><p class="history-empty">Loading your sessions…</p></div>
+        </article>
+      </aside>
+    </section>
+  </main>
+  <script src="/js/interview.js" defer></script>
+  <script src="/js/account-menu.js" defer></script>
+</body>
+</html>
