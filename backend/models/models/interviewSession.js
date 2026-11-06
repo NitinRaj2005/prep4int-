@@ -30,6 +30,16 @@ const interviewSessionSchema = new mongoose.Schema({
         index: true
     },
     role: { type: String, required: true, trim: true, maxlength: 80 },
+    jdPreparationId: { type: mongoose.Schema.Types.ObjectId, ref: "JDPreparation", default: null },
+    resumeAnalysisId: { type: mongoose.Schema.Types.ObjectId, ref: "ResumeAnalysis", default: null },
+    preparationContext: {
+        company: { type: String, default: "", maxlength: 120 },
+        jobDescription: { type: String, default: "", maxlength: 20000 },
+        skills: { type: [mongoose.Schema.Types.Mixed], default: [] },
+        resumeSkills: { type: [String], default: [] },
+        projects: { type: [mongoose.Schema.Types.Mixed], default: [] },
+        recommendations: { type: [mongoose.Schema.Types.Mixed], default: [] }
+    },
     category: {
         type: String,
         enum: ["DSA", "OOP", "DBMS", "OS", "CN", "HR", "Mixed", "Resume-based"],
