@@ -25,7 +25,7 @@ const careerLimiter = rateLimit({
 const isPdf = (buffer) => buffer && buffer.length >= 5 && buffer.subarray(0, 5).toString("ascii") === "%PDF-";
 const validId = (id) => /^[a-f0-9]{24}$/i.test(id);
 
-router.get("/health", (req, res) => res.json({ available: true, phase: 2 }));
+router.get("/health", (req, res) => res.json({ available: true, phase: 3 }));
 
 // PDF bytes and extracted text stay in memory. Only structured analysis is persisted.
 const resumeUploadLimiter = rateLimit({
