@@ -58,8 +58,7 @@
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Unable to create interview.");
-      showStatus("Interview session created. Session ID: " + data.session.id + ". The live AI interview room is coming in Phase 2.");
-      await loadHistory();
+      window.location.href = "/interview/" + encodeURIComponent(data.session.id);
     } catch (error) {
       showStatus(error.message, true);
     } finally {
