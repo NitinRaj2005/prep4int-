@@ -12,142 +12,160 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 28px 16px;
+  padding: 18px;
   background: #1abc9c;
 }
 
 .container {
+  position: relative;
   width: 100%;
-  max-width: 720px;
-  background-color: #fff;
-  padding: 32px 38px;
-  border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  max-width: 790px;
+  padding: 28px 34px 25px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 16px;
+  box-shadow: 0 18px 45px rgba(0, 74, 62, 0.18);
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 5px;
+  background: linear-gradient(90deg, #1abc9c 0%, #71b7e6 55%, #9b59b6 100%);
+}
+
+.form-heading {
+  margin-bottom: 20px;
+}
+
+.form-eyebrow {
+  display: inline-block;
+  margin-bottom: 7px;
+  color: #159d83;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.7px;
 }
 
 .container .title {
-  font-size: 27px;
-  font-weight: 600;
-  color: #252525;
   position: relative;
-  padding-bottom: 12px;
-  letter-spacing: 0.2px;
+  color: #202b2a;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
 }
 
-.container .title::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 4px;
-  width: 48px;
-  border-radius: 5px;
-  background: #1abc9c;
+.form-subtitle {
+  margin-top: 6px;
+  color: #7b8987;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .content form .user-details {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  column-gap: 24px;
-  margin: 24px 0 4px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 22px;
+  row-gap: 13px;
+  margin: 0;
 }
 
 form .user-details .input-box {
-  margin-bottom: 19px;
-  width: calc(50% - 12px);
+  width: 100%;
+  min-width: 0;
 }
 
 form .input-box span.details {
   display: block;
-  color: #343434;
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  color: #34413f;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .user-details .input-box input {
-  height: 48px;
   width: 100%;
+  height: 43px;
+  padding: 0 13px;
   outline: none;
-  font-size: 14px;
-  color: #292929;
-  border-radius: 7px;
-  padding: 0 14px;
-  border: 1px solid #d7dddf;
-  background: #fbfdfd;
+  border: 1px solid #dce5e3;
+  border-radius: 8px;
+  background: #f8fbfa;
+  color: #263330;
+  font-size: 13px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .user-details .input-box input::placeholder {
-  color: #9aa3a5;
+  color: #a0adaa;
 }
 
 .user-details .input-box input:hover {
-  border-color: #a9dcd2;
+  border-color: #a8dcd2;
 }
 
 .user-details .input-box input:focus {
   border-color: #1abc9c;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.13);
+  box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.12);
 }
 
 .gender-details {
-  width: 100%;
-  margin-top: 3px;
-  position: relative;
+  grid-column: 1 / -1;
+  margin-top: 2px;
 }
 
 form .gender-details .gender-title {
-  color: #343434;
-  font-size: 14px;
-  font-weight: 500;
+  color: #34413f;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 form .category {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  width: 100%;
-  margin-top: 12px;
+  gap: 9px;
+  margin-top: 8px;
 }
 
 form .category label {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  min-height: 36px;
+  padding: 6px 11px;
+  border: 1px solid #e0e8e6;
+  border-radius: 8px;
+  color: #53615e;
+  background: #fff;
+  font-size: 12px;
   cursor: pointer;
-  margin-right: 0;
-  padding: 9px 13px;
-  border: 1px solid #e0e6e6;
-  border-radius: 7px;
-  color: #4b5555;
-  font-size: 13px;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
 form .category label:hover {
   border-color: #1abc9c;
-  background: rgba(26, 188, 156, 0.06);
+  background: #f2fbf8;
 }
 
 form .category label .dot {
-  height: 17px;
-  width: 17px;
-  flex: 0 0 17px;
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  margin-right: 8px;
+  border: 4px solid #e2e8e6;
   border-radius: 50%;
-  margin-right: 9px;
-  background: #e1e5e5;
-  border: 4px solid #e1e5e5;
+  background: #e2e8e6;
   transition: all 0.2s ease;
 }
 
 #dot-1:checked ~ .category label .one,
 #dot-2:checked ~ .category label .two,
 #dot-3:checked ~ .category label .three {
-  background: #9b59b6;
-  border-color: #eadcf0;
+  border-color: #d9f4ed;
+  background: #159d83;
 }
 
 form input[type="radio"] {
@@ -155,104 +173,134 @@ form input[type="radio"] {
 }
 
 form .button {
-  margin: 25px 0 0;
+  margin: 18px 0 0;
 }
 
 form .button input {
-  min-height: 49px;
   width: 100%;
-  border-radius: 7px;
-  border: none;
+  min-height: 45px;
+  border: 0;
+  border-radius: 8px;
   color: #fff;
-  font-size: 16px;
+  background: #1abc9c;
+  box-shadow: 0 6px 14px rgba(26, 188, 156, 0.2);
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.2px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-  background: #1abc9c;
-  box-shadow: 0 5px 12px rgba(26, 188, 156, 0.2);
 }
 
 form .button input:hover {
-  background: linear-gradient(-135deg, #71b7e6, #9b59b6);
   transform: translateY(-1px);
-  box-shadow: 0 7px 16px rgba(155, 89, 182, 0.2);
+  background: linear-gradient(110deg, #1abc9c, #9b59b6);
+  box-shadow: 0 8px 18px rgba(26, 188, 156, 0.25);
 }
 
 form .button input:active {
   transform: translateY(0);
 }
 
-.log {
-  min-height: 40px;
-  color: white;
-  border: none;
-  border-radius: 7px;
-  background-color: #1abc9c;
+form .button > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
   margin-top: 10px;
-  padding: 8px 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-size: 13px;
-  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .tt {
   text-decoration: none;
 }
 
-form .log:hover {
-  background: linear-gradient(-135deg, #71b7e6, #9b59b6);
-  transform: translateY(-1px);
+.log {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  margin: 0;
+  padding: 7px 10px;
+  border: 1px solid #dcebe7;
+  border-radius: 8px;
+  color: #287b6b;
+  background: #f5fbf9;
+  text-align: center;
+  font-size: 11px;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
-@media (max-width: 584px) {
+.log span {
+  color: inherit !important;
+}
+
+form .log:hover {
+  border-color: #1abc9c;
+  color: #117b68;
+  background: #eaf8f4;
+}
+
+@media (max-width: 600px) {
   body {
     align-items: flex-start;
-    padding: 18px 12px;
+    padding: 14px 10px;
   }
 
   .container {
-    max-width: 100%;
-    padding: 26px 22px;
+    max-width: 460px;
+    padding: 25px 20px 20px;
+    border-radius: 13px;
   }
 
-  form .user-details .input-box {
-    width: 100%;
-    margin-bottom: 15px;
+  .container .title {
+    font-size: 23px;
   }
 
   .content form .user-details {
-    margin-top: 20px;
+    grid-template-columns: 1fr;
+    row-gap: 12px;
   }
 
-  form .category {
-    gap: 8px;
-  }
-
-  form .category label {
-    padding: 8px 10px;
+  .gender-details {
+    grid-column: auto;
   }
 }
 
 @media (max-width: 380px) {
   .container {
-    padding: 22px 16px;
+    padding: 23px 16px 18px;
   }
 
-  .container .title {
-    font-size: 24px;
+  form .button > div {
+    grid-template-columns: 1fr;
+    gap: 7px;
   }
 
   form .category {
-    flex-direction: column;
-    align-items: stretch;
+    gap: 7px;
+  }
+}
+
+@media (max-height: 720px) and (min-width: 601px) {
+  body {
+    align-items: flex-start;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
-  .log {
-    font-size: 12px;
+  .container {
+    padding-top: 22px;
+    padding-bottom: 19px;
+  }
+
+  .form-heading {
+    margin-bottom: 14px;
+  }
+
+  .content form .user-details {
+    row-gap: 10px;
+  }
+
+  form .button {
+    margin-top: 13px;
   }
 }
 
@@ -261,154 +309,5 @@ form .log:hover {
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
-  }
-}
-
-
-/* Compact registration layout to fit common laptop screens */
-body {
-  padding: 12px 16px;
-}
-
-.container {
-  max-width: 680px;
-  padding: 22px 30px;
-  border-radius: 10px;
-}
-
-.container .title {
-  font-size: 24px;
-  padding-bottom: 8px;
-}
-
-.container .title::before {
-  height: 3px;
-  width: 42px;
-}
-
-.content form .user-details {
-  margin: 15px 0 0;
-  column-gap: 20px;
-}
-
-form .user-details .input-box {
-  width: calc(50% - 10px);
-  margin-bottom: 11px;
-}
-
-form .input-box span.details {
-  font-size: 13px;
-  margin-bottom: 5px;
-}
-
-.user-details .input-box input {
-  height: 40px;
-  font-size: 13px;
-  border-radius: 6px;
-}
-
-.gender-details {
-  margin-top: 0;
-}
-
-form .gender-details .gender-title {
-  font-size: 13px;
-}
-
-form .category {
-  margin-top: 7px;
-  gap: 8px;
-}
-
-form .category label {
-  padding: 7px 10px;
-  font-size: 12px;
-}
-
-form .category label .dot {
-  height: 15px;
-  width: 15px;
-  flex-basis: 15px;
-  margin-right: 7px;
-}
-
-form .button {
-  margin: 15px 0 0;
-}
-
-form .button input {
-  min-height: 42px;
-  font-size: 15px;
-}
-
-.log {
-  min-height: 34px;
-  margin-top: 7px;
-  padding: 6px 10px;
-  font-size: 12px;
-}
-
-@media (max-height: 760px) and (min-width: 585px) {
-  body {
-    align-items: flex-start;
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-
-  .container {
-    padding-top: 17px;
-    padding-bottom: 17px;
-  }
-
-  .content form .user-details {
-    margin-top: 11px;
-  }
-
-  form .user-details .input-box {
-    margin-bottom: 8px;
-  }
-
-  form .button {
-    margin-top: 11px;
-  }
-
-  .log {
-    min-height: 30px;
-    margin-top: 5px;
-  }
-}
-
-@media (max-width: 584px) {
-  body {
-    padding: 14px 12px;
-  }
-
-  .container {
-    padding: 22px 18px;
-  }
-
-  form .user-details .input-box {
-    width: 100%;
-    margin-bottom: 12px;
-  }
-
-  .content form .user-details {
-    margin-top: 16px;
-  }
-
-  form .category {
-    flex-direction: row;
-    gap: 7px;
-  }
-
-  form .category label {
-    padding: 7px 9px;
-  }
-}
-
-@media (max-width: 380px) {
-  form .category {
-    flex-direction: column;
-    align-items: stretch;
   }
 }
