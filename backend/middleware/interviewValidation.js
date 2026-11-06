@@ -29,7 +29,11 @@ const validateStartInterview = (req, res, next) => {
     if (!allowedDurations.includes(durationMinutes)) return res.status(400).json({ error: "Choose 15, 20 or 30 minutes." });
     if (!allowedQuestionLimits.includes(questionLimit)) return res.status(400).json({ error: "Choose 5, 10 or 15 questions." });
 
-    req.interviewSetup = { role, category, difficulty, mode, durationMinutes, questionLimit };
+    const jdPreparationId = typeof body.jdPreparationId === "string" ? body.jdPreparationId : "";
+    const resumeAnalysisId = typeof body.resumeAnalysisId === "string" ? body.resumeAnalysisId : "";
+    if (jdPreparationId && !/^[a-f0-9]{24}$/i.test(jdPreparationId)) return res.status(400).json({ error: "Invalid JD preparation ID." });
+    if (resumeAnalysisId && !/^[a-f0-9]{24}$/i.test(resumeAnalysisId)) return res.status(400).json({ error: "Invalid resume analysis ID." });
+    req.interviewSetup = { role, category, difficulty, mode, durationMinutes, questionLimit, jdPreparationId, resumeAnalysisId };
     return next();
 };
 
