@@ -39,7 +39,7 @@
       $("room-timer").textContent = String(Math.floor(timerSeconds / 60)).padStart(2,"0") + ":" + String(timerSeconds % 60).padStart(2,"0");
       if (timerSeconds === 0) {
         window.clearInterval(timerHandle);
-        $("room-error").textContent = "Your 30-minute practice time is over. Please submit your current answer to finish.";
+        $("room-error").textContent = "Your selected practice time is over. Please submit your current answer to finish.";
       }
     }, 1000);
   };
@@ -49,7 +49,7 @@
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Unable to load interview.");
       const session = data.session;
-      $("room-subtitle").textContent = session.role + " · " + session.category + " · " + session.difficulty;
+      $("room-subtitle").textContent = session.role + " · " + session.category + " · " + session.difficulty;\n      timerSeconds = (session.durationMinutes || 30) * 60;\n      $("room-timer").textContent = String(Math.floor(timerSeconds / 60)).padStart(2,"0") + ":00";
       if (session.status === "completed") { showReport({ overallScore: session.overallScore, evaluation: session.evaluation, strengths: session.strengths, weaknesses: session.weaknesses, recommendations: session.recommendations }); return; }
       const pending = session.questions.find(q => !q.answer);
       if (!pending) throw new Error("No pending question found. Please return to your interview dashboard.");
