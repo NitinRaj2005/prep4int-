@@ -18,7 +18,6 @@ const resumeAnalysisSchema = new mongoose.Schema({
     fileSize: { type: Number, required: true, min: 1, max: 5 * 1024 * 1024 },
     mimeType: { type: String, enum: ["application/pdf"], default: "application/pdf" },
     status: { type: String, enum: ["uploaded", "processing", "completed", "failed"], default: "uploaded", index: true },
-    extractedText: { type: String, default: "", select: false, maxlength: 100000 },
     candidate: {
         name: { type: String, default: "", maxlength: 120 },
         email: { type: String, default: "", maxlength: 254 },
