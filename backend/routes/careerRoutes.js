@@ -68,6 +68,8 @@ router.post("/resume/upload", resumeUploadLimiter, (req, res, next) => {
                 fileName: record.originalFileName,
                 status: record.status,
                 overallScore: record.overallScore,
+                scoreBreakdown: record.scoreBreakdown,
+                strengths: record.strengths,
                 candidate: record.candidate,
                 skills: record.skills,
                 projects: record.projects,
