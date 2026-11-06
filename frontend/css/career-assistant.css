@@ -89,3 +89,16 @@ body{background:rgb(242,229,210)}
 
 .jd-analysis-form input[type=file]{padding:10px;border:1px dashed #b9d9d0;border-radius:8px;background:#fff}
 .jd-upload-hint{margin:-4px 0 2px!important;color:#778581;font-size:11px!important}
+
+.jd-recommendation{padding:11px 0;border-bottom:1px solid #edf1ef}
+.jd-recommendation small{display:inline-block;margin-left:8px;color:#778581;font-size:10px}
+.jd-recommendation p{margin:7px 0 0;color:#53645e;font-size:12px;line-height:1.6}
+.jd-must-have{background:#fdebea;color:#b44b45}
+.jd-important{background:#fff3d9;color:#986d18}
+.jd-good-to-have{background:#edf1f3;color:#64737a}
+.jd-question{margin:9px 0;padding:12px;border:1px solid #e8efec;border-radius:9px;background:#fff}
+.jd-question summary{display:grid;gap:6px;cursor:pointer;list-style-position:inside;color:#344c45;font-size:12px;font-weight:700;line-height:1.6}
+.jd-question summary small{color:#168a75;font-size:10px;font-weight:600}
+.jd-question>strong{display:block;margin:12px 0 4px;color:#344c45;font-size:11px}
+.jd-question ul{margin:4px 0;padding-left:20px}
+.jd-question li{color:#53645e;font-size:11px;line-height:1.6}
