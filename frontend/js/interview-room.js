@@ -4,7 +4,7 @@
   const id = root.dataset.sessionId;
   const $ = (name) => document.getElementById(name);
   let questionNumber = 1;
-  let recognition = null;
+  let recognition = null;\n  let lastAnswerMode = "text";
   let timerSeconds = 30 * 60;
   let timerHandle = null;
   const setError = message => { $("room-error").textContent = message || ""; };
@@ -81,7 +81,7 @@
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) { $("voice-status").textContent = "Voice input is not supported here. Try Chrome or Edge."; return; }
     if (recognition) { recognition.stop(); recognition = null; $("voice-answer").innerHTML = '<i class="fa-solid fa-microphone"></i> Speak answer'; return; }
-    recognition = new SpeechRecognition(); recognition.lang = "en-IN"; recognition.continuous = true; recognition.interimResults = true;
+    lastAnswerMode = "voice";\n    recognition = new SpeechRecognition(); recognition.lang = "en-IN"; recognition.continuous = true; recognition.interimResults = true;
     const button = $("voice-answer"); button.innerHTML = '<i class="fa-solid fa-stop"></i> Stop recording'; $("voice-status").textContent = "Listening…";
     recognition.onresult = event => { let text = ""; for (let i=0;i<event.results.length;i++) text += event.results[i][0].transcript + (event.results[i].isFinal ? " " : ""); $("candidate-answer").value = text.slice(0,10000); };
     recognition.onerror = () => { $("voice-status").textContent = "Could not capture audio. Check microphone permission."; button.innerHTML = '<i class="fa-solid fa-microphone"></i> Speak answer'; recognition = null; };
@@ -93,7 +93,7 @@
     if (!answer) { setError("Please enter or record your answer first."); return; }
     setError(""); const button = $("submit-answer"); button.disabled = true; button.textContent = "Evaluating answer…";
     try {
-      const response = await fetch("/api/interview/" + encodeURIComponent(id) + "/answer", { method:"POST", credentials:"same-origin", headers:{"Content-Type":"application/json"}, body:JSON.stringify({answer, answerMode: recognition ? "voice" : "text"}) });
+      const response = await fetch("/api/interview/" + encodeURIComponent(id) + "/answer", { method:"POST", credentials:"same-origin", headers:{"Content-Type":"application/json"}, body:JSON.stringify({answer, answerMode: lastAnswerMode}) });
       const data = await response.json(); if (!response.ok) throw new Error(data.error || "Unable to submit answer.");
       if (data.completed) { $("question-panel").hidden = true; $("feedback-panel").hidden = false; $("feedback-score").textContent = "Final answer score: " + data.evaluation.score + " / 10"; $("feedback-text").textContent = data.evaluation.feedback; safeList("feedback-strengths",data.evaluation.strengths); safeList("feedback-improvements",data.evaluation.improvements); $("continue-interview").textContent = "View final report"; $("continue-interview").onclick = () => showReport(data.report); }
       else showFeedback(data.evaluation, data.question, data.questionNumber, data.totalQuestions);
