@@ -64,7 +64,7 @@
           <label for="jd-level">Experience level</label><select id="jd-level" name="experienceLevel"><option value="intern">Intern</option><option value="entry" selected>Entry level</option><option value="mid">Mid level</option><option value="senior">Senior</option><option value="unspecified">Not specified</option></select>
           <label for="jd-resume">Resume to compare</label><select id="jd-resume" name="resumeAnalysisId"><option value="">Use latest analyzed resume automatically</option></select>
           <label for="jd-days">Preparation roadmap duration: <strong id="jd-days-value">14 days</strong></label><input id="jd-days" name="roadmapDays" type="range" min="1" max="90" value="14">
-          <label for="jd-text">Paste job description (100–20,000 characters)</label><textarea id="jd-text" name="jobDescription" rows="7" minlength="100" maxlength="20000" required placeholder="Paste the complete job description here..."></textarea>
+          <label for="jd-pdf">Upload job description PDF (optional, max 5 MB)</label><input id="jd-pdf" name="jdPdf" type="file" accept="application/pdf,.pdf"><p class="jd-upload-hint">You can upload a PDF or paste the job description below.</p><label for="jd-text">Paste job description (100–20,000 characters)</label><textarea id="jd-text" name="jobDescription" rows="7" minlength="100" maxlength="20000" placeholder="Paste the complete job description here..."></textarea>
           <button type="submit" id="jd-analyze-button"><i class="fa-solid fa-bullseye"></i> Analyze Job Description</button>
           <p id="jd-analysis-status" class="resume-upload-status" role="status" aria-live="polite"></p>
         </form>
