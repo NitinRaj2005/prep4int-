@@ -1,0 +1,20 @@
+:root{--career-accent:#1abc9c;--career-ink:#20302d;--career-muted:#778581}
+body{background:rgb(242,229,210)}
+.career-wrap{width:min(1120px,calc(100% - 36px));margin:48px auto 70px}
+.career-hero{margin-bottom:30px}
+.career-kicker,.career-label{color:#159d83;font-size:11px;font-weight:800;letter-spacing:1.4px}
+.career-hero h1{margin:9px 0 7px;color:var(--career-ink);font-size:clamp(30px,4vw,42px)}
+.career-hero p{margin:0;color:var(--career-muted);font-size:15px;line-height:1.7}
+.career-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.career-card{padding:28px;background:#fff;border:1px solid #e2eae7;border-radius:17px;box-shadow:0 10px 28px rgba(26,65,56,.07)}
+.career-icon{width:52px;height:52px;display:grid;place-items:center;margin-bottom:20px;border-radius:14px;background:#eaf8f4;color:#159d83;font-size:22px}
+.career-card h2,.career-next h2{margin:8px 0;color:var(--career-ink);font-size:22px}
+.career-card p,.career-next p{color:#778581;font-size:13px;line-height:1.8}
+.career-card ul{display:grid;gap:10px;margin:20px 0;padding-left:19px;color:#455650;font-size:13px}
+.career-status{display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:9px 12px;border-radius:8px;background:#effaf6;color:#16866f;font-size:11px;font-weight:700}
+.career-next{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:22px;padding:25px 28px;border:1px solid #e2eae7;border-radius:16px;background:#fff}
+.career-next h2{font-size:19px}.career-next p{margin-bottom:0}
+.career-interview-link{flex:0 0 auto;padding:13px 17px;border-radius:9px;background:#1abc9c;color:#fff;text-decoration:none;font-size:12px;font-weight:700}
+.career-interview-link:hover{background:#159d83}
+.career-note{display:flex;gap:9px;align-items:center;margin:18px 2px;color:#71807a;font-size:12px}
+@media(max-width:700px){.career-wrap{margin-top:28px}.career-grid{grid-template-columns:1fr}.career-card{padding:22px}.career-next{align-items:flex-start;flex-direction:column}.career-interview-link{width:100%;text-align:center;box-sizing:border-box}}
