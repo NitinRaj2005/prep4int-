@@ -5,6 +5,41 @@
   const historyBox = document.getElementById("interview-history");
   const durationSelect = document.getElementById("interview-duration");
   const questionSelect = document.getElementById("interview-question-limit");
+
+  const jdSelect = document.getElementById("interview-jd");
+  const resumeSelect = document.getElementById("interview-resume");
+  const loadCareerContext = async () => {
+    try {
+      const [jdResponse, resumeResponse] = await Promise.all([
+        fetch("/api/career/jd/history", { credentials: "same-origin" }),
+        fetch("/api/career/resume/history", { credentials: "same-origin" })
+      ]);
+      const [jdData, resumeData] = await Promise.all([jdResponse.json(), resumeResponse.json()]);
+      if (jdResponse.ok) (jdData.preparations || []).filter(item => item.status === "completed").forEach(item => {
+        const option = document.createElement("option");
+        option.value = item._id;
+        option.textContent = (item.role || "Role") + (item.company ? " · " + item.company : "") + " · " + new Date(item.createdAt).toLocaleDateString();
+        jdSelect.append(option);
+      });
+      if (resumeResponse.ok) (resumeData.resumes || []).filter(item => item.status === "completed").forEach(item => {
+        const option = document.createElement("option");
+        option.value = item._id;
+        option.textContent = item.originalFileName + (item.overallScore == null ? "" : " · " + item.overallScore + "/100");
+        resumeSelect.append(option);
+      });
+    } catch (error) {
+      console.warn("Could not load saved career context:", error.message);
+    }
+  };
+  jdSelect.addEventListener("change", () => {
+    const selected = jdSelect.value;
+    if (selected) {
+      const option = jdSelect.options[jdSelect.selectedIndex];
+      const title = option.textContent.split(" · ")[0];
+      if (title) document.getElementById("interview-role").value = title;
+    }
+  });
+
   const updateSessionSummary = () => {
     document.getElementById("summary-duration").textContent = durationSelect.value + " min";
     document.getElementById("summary-questions").textContent = questionSelect.value;
@@ -58,7 +93,9 @@
       difficulty: document.getElementById("interview-difficulty").value,
       mode: form.querySelector('input[name="mode"]:checked').value,
       durationMinutes: Number(durationSelect.value),
-      questionLimit: Number(questionSelect.value)
+      questionLimit: Number(questionSelect.value),
+      jdPreparationId: jdSelect.value,
+      resumeAnalysisId: resumeSelect.value
     };
     try {
       const response = await fetch("/api/interview/start", {
@@ -80,4 +117,5 @@
 
   document.getElementById("refresh-history").addEventListener("click", loadHistory);
   loadHistory();
+  loadCareerContext();
 })();
