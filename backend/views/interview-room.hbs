@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Room | Prep4Int</title>
+  <link rel="stylesheet" href="/css/prep4int.css">
+  <link rel="stylesheet" href="/css/interview.css">
+  <link rel="stylesheet" href="/css/interview-room.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <nav><ul>
+    <li class="brand"><a class="brand-link" href="/index"><img src="/img/logo.png" alt="Prep4Int logo"><span>Prep4Int</span></a></li>
+    <div class="navi"><a class="main-nav-link" href="/index"><i class="fa-solid fa-house"></i><span>Home</span></a><a class="main-nav-link" href="/interview"><i class="fa-solid fa-robot"></i><span>AI Interview</span></a></div>
+    <li class="account-menu"><a class="main-nav-link" href="/profile"><i class="fa-solid fa-user"></i><span>My Profile</span></a></li>
+  </ul></nav>
+  <main class="room-wrap" id="interview-room" data-session-id="{{sessionId}}">
+    <header class="room-top"><div><span class="interview-kicker">PREP4INT AI · LIVE SESSION</span><h1>Mock Interview Room</h1><p id="room-subtitle">Preparing your interview…</p></div><a class="room-exit" href="/interview">Exit room</a></header>
+    <section class="room-card">
+      <div class="room-progress"><div><span id="question-count">Question 1 of 10</span><span id="room-timer">30:00</span></div><div class="progress-track"><span id="progress-fill"></span></div></div>
+      <div id="room-loading" class="room-loading"><i class="fa-solid fa-spinner fa-spin"></i> Getting your first question…</div>
+      <div id="question-panel" hidden>
+        <div class="question-label"><i class="fa-solid fa-robot"></i> AI INTERVIEWER</div>
+        <h2 id="question-text"></h2>
+        <div class="question-tools"><button type="button" id="speak-question"><i class="fa-solid fa-volume-high"></i> Read question</button><span id="voice-status" aria-live="polite"></span></div>
+        <label for="candidate-answer">Your answer</label>
+        <textarea id="candidate-answer" rows="7" maxlength="10000" placeholder="Structure your thoughts and explain your approach…"></textarea>
+        <div class="answer-actions"><span id="answer-hint">Tip: Explain your reasoning with an example.</span><div><button type="button" class="voice-btn" id="voice-answer"><i class="fa-solid fa-microphone"></i> Speak answer</button><button type="button" class="submit-answer-btn" id="submit-answer"><i class="fa-solid fa-paper-plane"></i> Submit answer</button></div></div>
+      </div>
+      <div id="feedback-panel" class="feedback-panel" hidden><h3><i class="fa-solid fa-comment-dots"></i> Interviewer feedback</h3><div class="feedback-score" id="feedback-score"></div><p id="feedback-text"></p><div class="feedback-columns"><div><strong>What went well</strong><ul id="feedback-strengths"></ul></div><div><strong>Improve next time</strong><ul id="feedback-improvements"></ul></div></div><button type="button" id="continue-interview" class="submit-answer-btn">Next question <i class="fa-solid fa-arrow-right"></i></button></div>
+      <div id="report-panel" class="report-panel" hidden><div class="report-icon"><i class="fa-solid fa-trophy"></i></div><h2>Interview completed!</h2><p>Your performance report is ready.</p><div class="overall-score" id="overall-score"></div><div class="score-grid" id="score-grid"></div><div class="feedback-columns"><div><h3>Strengths</h3><ul id="report-strengths"></ul></div><div><h3>Areas to improve</h3><ul id="report-weaknesses"></ul></div></div><h3>Recommendations</h3><ul id="report-recommendations"></ul><a class="submit-answer-btn report-home" href="/interview">Back to AI Interview</a></div>
+      <p id="room-error" class="room-error" role="alert"></p>
+    </section>
+  </main>
+  <script src="/js/interview-room.js" defer></script>
+  <script src="/js/account-menu.js" defer></script>
+</body>
+</html>
