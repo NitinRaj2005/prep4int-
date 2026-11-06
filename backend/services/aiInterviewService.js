@@ -34,7 +34,6 @@ const callGroq = async (messages, temperature = 0.4, maxCompletionTokens = 500) 
                     messages,
                     temperature,
                     max_completion_tokens: maxCompletionTokens,
-                    response_format: { type: "json_object" }
                 }),
                 signal: controller.signal
             });
@@ -42,6 +41,7 @@ const callGroq = async (messages, temperature = 0.4, maxCompletionTokens = 500) 
             if (!response.ok) {
                 const providerMessage = data && data.error ? data.error.message : "Unknown error";
                 console.error("Groq API error:", response.status, providerMessage);
+                if (data && data.error && data.error.failed_generation) console.error("Groq failed generation sample:", String(data.error.failed_generation).slice(0, 1200));
 
                 if (response.status === 429 && attempt === 0) {
                     const retryMatch = String(providerMessage).match(/try again in ([0-9.]+)s/i);
