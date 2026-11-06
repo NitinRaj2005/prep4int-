@@ -3,6 +3,15 @@
   const status = document.getElementById("interview-setup-status");
   const startButton = document.getElementById("start-interview-btn");
   const historyBox = document.getElementById("interview-history");
+  const durationSelect = document.getElementById("interview-duration");
+  const questionSelect = document.getElementById("interview-question-limit");
+  const updateSessionSummary = () => {
+    document.getElementById("summary-duration").textContent = durationSelect.value + " min";
+    document.getElementById("summary-questions").textContent = questionSelect.value;
+  };
+  durationSelect.addEventListener("change", updateSessionSummary);
+  questionSelect.addEventListener("change", updateSessionSummary);
+  updateSessionSummary();
 
   const showStatus = (message, isError = false) => {
     status.textContent = message;
@@ -47,7 +56,9 @@
       role: document.getElementById("interview-role").value,
       category: document.getElementById("interview-category").value,
       difficulty: document.getElementById("interview-difficulty").value,
-      mode: form.querySelector('input[name="mode"]:checked').value
+      mode: form.querySelector('input[name="mode"]:checked').value,
+      durationMinutes: Number(durationSelect.value),
+      questionLimit: Number(questionSelect.value)
     };
     try {
       const response = await fetch("/api/interview/start", {
