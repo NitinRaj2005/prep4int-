@@ -116,7 +116,7 @@ const requireAuthenticatedUser = (req, res, next) => {
 // AI Mock Interview APIs are isolated behind the existing session authentication.
 app.use("/api/interview", requireAuthenticatedUser, interviewRoutes);
 
-app.get("/interview", (req, res) => {
+app.get("/interview/:id", (req, res) => {\n    if (!req.session.userId) return res.redirect("/login");\n    return res.render("interview-room", { sessionId: req.params.id });\n});\n\napp.get("/interview", (req, res) => {
     if (!req.session.userId) return res.redirect("/login");
     return res.render("interview");
 });
