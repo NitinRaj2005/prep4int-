@@ -1718,3 +1718,32 @@ nav.home-page-nav > ul > .navi > .main-nav-link:last-child {
     nav.home-page-nav > ul > .navi { gap: 0; padding-left: 5px; }
     nav.home-page-nav > ul > .navi > .main-nav-link { font-size: 13px; padding: 8px 5px; }
 }
+
+
+/* AI Mock Interview card on the home page */
+.interview-card-visual {
+    min-height: 335px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 20px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, #242424, #555);
+    color: #f4df9a;
+    font-family: Georgia, serif;
+    font-size: clamp(22px, 2vw, 30px);
+    font-weight: 700;
+    text-align: center;
+}
+.interview-card-visual i {
+    color: #19b99b;
+    font-size: clamp(72px, 7vw, 104px);
+}
+#dabba > .rounded { min-width: 0; }
+#dabba .box11 { height: 100%; display: flex; flex-direction: column; }
+#dabba .box11 > .px-6 { flex: 1 1 auto; }
+@media (max-width: 767px) {
+    .interview-card-visual { min-height: 230px; }
+}
