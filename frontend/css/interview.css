@@ -1,0 +1,82 @@
+:root {
+  --interview-accent: #1abc9c;
+  --interview-ink: #20302d;
+  --interview-muted: #778581;
+  --interview-border: #e2eae7;
+}
+.interview-wrap {
+  width: min(1120px, calc(100% - 36px));
+  margin: 42px auto 64px;
+}
+.interview-heading { margin-bottom: 26px; }
+.interview-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: #159d83; font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+}
+.interview-heading h1 { margin: 8px 0 5px; color: var(--interview-ink); font-size: clamp(28px, 4vw, 38px); }
+.interview-heading p, .card-heading p { margin: 0; color: var(--interview-muted); font-size: 14px; }
+.interview-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(270px, .85fr); gap: 22px; align-items: start; }
+.interview-card {
+  padding: 24px; background: #fff; border: 1px solid var(--interview-border);
+  border-radius: 15px; box-shadow: 0 10px 28px rgba(26, 65, 56, .07);
+}
+.card-heading { display: flex; align-items: center; gap: 13px; margin-bottom: 23px; }
+.heading-icon, .side-icon {
+  width: 43px; height: 43px; display: grid; place-items: center; flex: 0 0 43px;
+  border-radius: 12px; color: #159d83; background: #eaf8f4; font-size: 18px;
+}
+.card-heading h2, .info-card h2, .history-heading h2 { margin: 0 0 4px; color: var(--interview-ink); font-size: 17px; }
+.interview-card form > label, .interview-field-grid label {
+  display: block; margin: 0 0 7px; color: #394743; font-size: 12px; font-weight: 600;
+}
+.interview-card input[type="text"], .interview-card select {
+  width: 100%; height: 43px; margin-bottom: 17px; padding: 0 12px;
+  border: 1px solid #dce6e2; border-radius: 8px; outline: none; background: #fbfdfc;
+  color: #293833; font: inherit; font-size: 13px;
+}
+.interview-card input:focus, .interview-card select:focus { border-color: var(--interview-accent); box-shadow: 0 0 0 3px rgba(26,188,156,.12); }
+.interview-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.mode-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin: 9px 0 18px; }
+.mode-option { cursor: pointer; }
+.mode-option input { position: absolute; opacity: 0; pointer-events: none; }
+.mode-option span {
+  min-height: 40px; display: flex; justify-content: center; align-items: center; gap: 7px;
+  border: 1px solid #dfe8e5; border-radius: 8px; color: #63716d; font-size: 12px; transition: .2s;
+}
+.mode-option input:checked + span { border-color: var(--interview-accent); color: #12866f; background: #effaf6; font-weight: 600; }
+.mode-option input:focus-visible + span { outline: 3px solid rgba(26,188,156,.2); }
+.session-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 13px; border-radius: 10px; background: #f5faf8; }
+.session-summary div { display: flex; flex-direction: column; gap: 3px; }
+.session-summary strong { color: #263a34; font-size: 14px; }
+.session-summary span { color: #87938f; font-size: 10px; }
+.start-interview-btn {
+  width: 100%; min-height: 46px; margin-top: 17px; border: 0; border-radius: 8px;
+  color: white; background: #1abc9c; font-size: 13px; font-weight: 600; cursor: pointer; transition: .2s;
+}
+.start-interview-btn:hover { background: #159d83; transform: translateY(-1px); }
+.start-interview-btn:disabled { opacity: .65; cursor: wait; transform: none; }
+.interview-status { min-height: 18px; margin: 10px 0 0; color: #16866f; font-size: 12px; }
+.interview-status.error { color: #c0392b; }
+.interview-side { display: grid; gap: 18px; }
+.info-card .side-icon { margin-bottom: 13px; }
+.info-card ol { display: grid; gap: 15px; margin: 18px 0 0; padding: 0; list-style: none; }
+.info-card li { display: flex; align-items: center; gap: 10px; color: #64716d; font-size: 12px; line-height: 1.5; }
+.info-card li span { width: 25px; height: 25px; display: grid; place-items: center; flex: 0 0 25px; border-radius: 50%; color: #148a73; background: #eaf8f4; font-weight: 600; }
+.history-heading { display: flex; justify-content: space-between; align-items: center; }
+.history-heading button { border: 0; background: transparent; color: #168d76; cursor: pointer; font-size: 15px; }
+.history-list { margin-top: 13px; display: grid; gap: 9px; }
+.history-empty { margin: 0; color: #899590; font-size: 12px; }
+.history-item { padding: 11px; border: 1px solid #e7eeeb; border-radius: 8px; }
+.history-item strong { display: block; color: #33433e; font-size: 12px; }
+.history-item span { display: block; margin-top: 4px; color: #899590; font-size: 10px; }
+.history-item .session-state { color: #168d76; }
+@media (max-width: 760px) {
+  .interview-wrap { margin-top: 25px; }
+  .interview-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 440px) {
+  .interview-card { padding: 18px; }
+  .interview-field-grid { grid-template-columns: 1fr; gap: 0; }
+  .mode-options { gap: 6px; }
+  .mode-option span { font-size: 11px; }
+}
