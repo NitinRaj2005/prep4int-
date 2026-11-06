@@ -86,3 +86,6 @@ body{background:rgb(242,229,210)}
 .jd-roadmap-task small,.jd-roadmap-task em{color:#71807a;font-size:11px;line-height:1.5;font-style:normal}
 .jd-roadmap-task input:checked+span strong{text-decoration:line-through;color:#89958f}
 @media(max-width:700px){.jd-result-grid{grid-template-columns:1fr}.jd-roadmap-header{align-items:flex-start;flex-direction:column}.jd-results:not([hidden]){padding:18px}}
+
+.jd-analysis-form input[type=file]{padding:10px;border:1px dashed #b9d9d0;border-radius:8px;background:#fff}
+.jd-upload-hint{margin:-4px 0 2px!important;color:#778581;font-size:11px!important}
