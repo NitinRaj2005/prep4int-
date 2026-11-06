@@ -13,6 +13,7 @@ const { mongoURI, connectToDatabase } = require("./db/db/conn");
 const Register = require("./models/models/registers");
 const ContactUs = require("./models/models/contactus");
 const interviewRoutes = require("./routes/interviewRoutes");
+const careerRoutes = require("./routes/careerRoutes");
 
 const app = express();
 const profilePhotoUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 400 * 1024, files: 1 } });
@@ -113,8 +114,9 @@ const requireAuthenticatedUser = (req, res, next) => {
     return next();
 };
 
-// AI Mock Interview APIs are isolated behind the existing session authentication.
+// AI Mock Interview and Career Assistant APIs use the existing session authentication.
 app.use("/api/interview", requireAuthenticatedUser, interviewRoutes);
+app.use("/api/career", requireAuthenticatedUser, careerRoutes);
 
 app.get("/interview/:id", (req, res) => {
     if (!req.session.userId) return res.redirect("/login");
@@ -124,6 +126,11 @@ app.get("/interview/:id", (req, res) => {
 app.get("/interview", (req, res) => {
     if (!req.session.userId) return res.redirect("/login");
     return res.render("interview");
+});
+
+app.get("/career-assistant", (req, res) => {
+    if (!req.session.userId) return res.redirect("/login");
+    return res.render("career-assistant");
 });
 
 app.get("/", (req, res) => {
