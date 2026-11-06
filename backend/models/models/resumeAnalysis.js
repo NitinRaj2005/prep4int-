@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const extractedSkillSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true, maxlength: 80 },
     category: { type: String, trim: true, maxlength: 60, default: "Other" },
-    proficiency: { type: String, enum: ["beginner", "intermediate", "advanced", "unspecified"], default: "unspecified" }
+    proficiency: { type: String, enum: ["beginner", "intermediate", "advanced", "unspecified"], default: "unspecified" },
+    evidence: { type: String, trim: true, maxlength: 240, default: "" }
 }, { _id: false });
 
 const projectSchema = new mongoose.Schema({
@@ -30,6 +31,14 @@ const resumeAnalysisSchema = new mongoose.Schema({
     missingSkills: { type: [String], default: [] },
     interviewQuestions: { type: [String], default: [] },
     overallScore: { type: Number, min: 0, max: 100, default: null },
+    scoreBreakdown: {
+        technicalSkills: { type: Number, min: 0, max: 100, default: 0 },
+        projects: { type: Number, min: 0, max: 100, default: 0 },
+        experience: { type: Number, min: 0, max: 100, default: 0 },
+        achievements: { type: Number, min: 0, max: 100, default: 0 },
+        formatting: { type: Number, min: 0, max: 100, default: 0 }
+    },
+    strengths: { type: [String], default: [] },
     feedback: { type: [String], default: [] },
     errorMessage: { type: String, default: "", maxlength: 500 },
     analyzedAt: { type: Date, default: null }
