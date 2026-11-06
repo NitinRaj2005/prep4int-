@@ -85,5 +85,146 @@
         } catch (error) { status.textContent = error.message; }
         finally { button.disabled = false; }
     });
+
+    const jdForm = document.getElementById("jd-analysis-form");
+    if (jdForm) {
+        const jdStatus = document.getElementById("jd-analysis-status");
+        const jdResults = document.getElementById("jd-results");
+        const jdHistoryList = document.getElementById("jd-history-list");
+        const resumeSelect = document.getElementById("jd-resume");
+        const daysInput = document.getElementById("jd-days");
+        const daysValue = document.getElementById("jd-days-value");
+        const jdButton = document.getElementById("jd-analyze-button");
+        let currentPreparationId = null;
+
+        daysInput.addEventListener("input", () => { daysValue.textContent = daysInput.value + " days"; });
+
+        const loadResumeOptions = async () => {
+            try {
+                const response = await fetch("/api/career/resume/history");
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Could not load resumes.");
+                (data.resumes || []).filter(item => item.status === "completed").forEach(item => {
+                    const option = document.createElement("option");
+                    option.value = item._id;
+                    option.textContent = item.originalFileName + (item.overallScore == null ? "" : " · " + item.overallScore + "/100");
+                    resumeSelect.appendChild(option);
+                });
+            } catch (error) { jdStatus.textContent = error.message; }
+        };
+
+        const renderJD = preparation => {
+            currentPreparationId = preparation._id;
+            const skills = preparation.skills || [];
+            const roadmap = preparation.roadmap || [];
+            const completed = roadmap.filter(task => task.completed).length;
+            const questions = preparation.interviewQuestions || [];
+            const recommendations = preparation.recommendations || [];
+            jdResults.hidden = false;
+            jdResults.innerHTML = `
+              <h2>JD Analysis · ${escapeHtml(preparation.role)}</h2>
+              <p>${escapeHtml(preparation.company || "Company not specified")} · ${escapeHtml(preparation.experienceLevel)} · ${escapeHtml(preparation.roadmapDays)}-day roadmap</p>
+              <div class="jd-match-score">${escapeHtml(preparation.matchPercentage ?? 0)}% <small>estimated resume match</small></div>
+              ${preparation.resumeAnalysisId ? "" : '<p class="jd-no-resume">No saved resume was available. Upload a resume to get a meaningful match score.</p>'}
+              <div class="jd-result-grid">
+                <section class="resume-result-section"><h3>Required skills and match</h3>
+                  ${skills.length ? skills.map(skill => '<div class="jd-skill-row"><div><strong>' + escapeHtml(skill.name) + '</strong><small>' + escapeHtml(skill.category) + ' · ' + escapeHtml(skill.priority) + '</small><p>' + escapeHtml(skill.notes) + '</p></div><span class="jd-status jd-' + escapeHtml(skill.status) + '">' + escapeHtml(skill.status.replace("-", " ")) + '</span></div>').join("") : "<p>No skills were extracted.</p>"}
+                </section>
+                <section class="resume-result-section"><h3>Recommendations</h3>${renderList(recommendations, "No recommendations returned.")}<h3>Role-specific interview questions</h3>${renderList(questions, "No questions generated.")}</section>
+              </div>
+              <section class="jd-roadmap"><div class="jd-roadmap-header"><div><h3>Personalized preparation roadmap</h3><p>${completed} of ${roadmap.length} days completed</p></div>
+                <form id="jd-roadmap-duration-form"><label for="jd-roadmap-days">Change duration</label><input id="jd-roadmap-days" name="days" type="number" min="1" max="90" value="${escapeHtml(preparation.roadmapDays)}"><button type="submit">Regenerate</button></form></div>
+                <div class="jd-progress-track"><span style="width:${roadmap.length ? completed / roadmap.length * 100 : 0}%"></span></div>
+                <div class="jd-roadmap-list">${roadmap.map(task => '<label class="jd-roadmap-task"><input type="checkbox" data-roadmap-day="' + escapeHtml(task.day) + '" ' + (task.completed ? "checked" : "") + '><span><strong>Day ' + escapeHtml(task.day) + ': ' + escapeHtml(task.title) + '</strong><small>' + escapeHtml(task.description) + '</small><em>' + escapeHtml((task.topics || []).join(" · ")) + '</em></span></label>').join("")}</div>
+              </section>`;
+            jdResults.scrollIntoView({ behavior: "smooth", block: "start" });
+        };
+
+        const loadJDHistory = async () => {
+            try {
+                const response = await fetch("/api/career/jd/history");
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Could not load JD history.");
+                const items = data.preparations || [];
+                jdHistoryList.innerHTML = items.length ? items.map(item => `
+                  <div class="resume-history-item"><span><strong>${escapeHtml(item.role)} · ${escapeHtml(item.company || "Company not specified")}</strong><br><small>${escapeHtml(new Date(item.createdAt).toLocaleString())} · ${escapeHtml(item.status)} · ${item.matchPercentage == null ? "No match score" : escapeHtml(item.matchPercentage + "% match")}</small></span>
+                  ${item.status === "completed" ? '<button type="button" data-jd-id="' + escapeHtml(item._id) + '">View preparation</button>' : ""}</div>`).join("") : "<p>No JD preparations yet.</p>";
+            } catch (error) { jdHistoryList.textContent = error.message; }
+        };
+
+        jdForm.addEventListener("submit", async event => {
+            event.preventDefault();
+            const jobDescription = document.getElementById("jd-text").value.trim();
+            if (jobDescription.length < 100) { jdStatus.textContent = "Please paste a job description with at least 100 characters."; return; }
+            const payload = {
+                company: document.getElementById("jd-company").value.trim(),
+                role: document.getElementById("jd-role").value.trim(),
+                experienceLevel: document.getElementById("jd-level").value,
+                resumeAnalysisId: resumeSelect.value,
+                roadmapDays: Number(daysInput.value),
+                jobDescription
+            };
+            jdButton.disabled = true;
+            jdStatus.textContent = "Analyzing the job description and creating your preparation roadmap...";
+            try {
+                const response = await fetch("/api/career/jd/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "JD analysis failed.");
+                jdStatus.textContent = data.message || "JD analysis complete.";
+                renderJD(data.preparation);
+                await loadJDHistory();
+            } catch (error) { jdStatus.textContent = error.message || "Unable to analyze this JD."; }
+            finally { jdButton.disabled = false; }
+        });
+
+        jdResults.addEventListener("submit", async event => {
+            if (event.target.id !== "jd-roadmap-duration-form" || !currentPreparationId) return;
+            event.preventDefault();
+            const days = Number(document.getElementById("jd-roadmap-days").value);
+            if (!Number.isInteger(days) || days < 1 || days > 90) { jdStatus.textContent = "Choose a duration between 1 and 90 days."; return; }
+            const button = event.target.querySelector("button");
+            button.disabled = true;
+            try {
+                const response = await fetch("/api/career/jd/" + encodeURIComponent(currentPreparationId) + "/roadmap-days", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ days }) });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Could not regenerate roadmap.");
+                renderJD(data.preparation);
+                await loadJDHistory();
+            } catch (error) { jdStatus.textContent = error.message; }
+            finally { button.disabled = false; }
+        });
+
+        jdResults.addEventListener("change", async event => {
+            const checkbox = event.target.closest("[data-roadmap-day]");
+            if (!checkbox || !currentPreparationId) return;
+            checkbox.disabled = true;
+            try {
+                const response = await fetch("/api/career/jd/" + encodeURIComponent(currentPreparationId) + "/roadmap/" + encodeURIComponent(checkbox.dataset.roadmapDay), { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ completed: checkbox.checked }) });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Could not update roadmap progress.");
+                const preparationResponse = await fetch("/api/career/jd/" + encodeURIComponent(currentPreparationId));
+                const preparationData = await preparationResponse.json();
+                if (!preparationResponse.ok) throw new Error(preparationData.error || "Could not refresh roadmap.");
+                renderJD(preparationData.preparation);
+            } catch (error) { jdStatus.textContent = error.message; checkbox.disabled = false; checkbox.checked = !checkbox.checked; }
+        });
+
+        jdHistoryList.addEventListener("click", async event => {
+            const button = event.target.closest("[data-jd-id]");
+            if (!button) return;
+            button.disabled = true;
+            try {
+                const response = await fetch("/api/career/jd/" + encodeURIComponent(button.dataset.jdId));
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Could not open this preparation.");
+                renderJD(data.preparation);
+            } catch (error) { jdStatus.textContent = error.message; }
+            finally { button.disabled = false; }
+        });
+
+        loadResumeOptions();
+        loadJDHistory();
+    }
+
     loadHistory();
 })();
