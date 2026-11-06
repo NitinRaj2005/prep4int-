@@ -15,15 +15,24 @@
         const candidate = resume.candidate || {};
         const skills = Array.isArray(resume.skills) ? resume.skills : [];
         const projects = Array.isArray(resume.projects) ? resume.projects : [];
+        const breakdown = resume.scoreBreakdown || {};
+        const scoreRows = [
+            ["Technical skills", breakdown.technicalSkills],
+            ["Projects", breakdown.projects],
+            ["Experience", breakdown.experience],
+            ["Achievements", breakdown.achievements],
+            ["Resume presentation", breakdown.formatting]
+        ];
         results.hidden = false;
         results.innerHTML = `
           <h2>Resume Analysis</h2><div class="resume-score">${escapeHtml(resume.overallScore ?? 0)}/100</div>
           <p>Indicative AI resume score · ${escapeHtml(candidate.name || resume.fileName || "Your resume")}</p>
+          <section class="resume-score-breakdown"><h3>Score breakdown</h3>${scoreRows.map(([label, value]) => '<div class="score-row"><span>' + escapeHtml(label) + '</span><div class="score-track"><span style="width:' + Math.max(0, Math.min(100, Number(value) || 0)) + '%"></span></div><strong>' + escapeHtml(value ?? 0) + '/100</strong></div>').join("")}</section>
           <div class="resume-result-grid">
-            <section class="resume-result-section"><h3>Skills identified</h3>${skills.length ? skills.map(skill => '<span class="resume-chip">' + escapeHtml(skill.name) + ' · ' + escapeHtml(skill.proficiency) + '</span>').join("") : "<p>No skills confidently extracted.</p>"}</section>
+            <section class="resume-result-section"><h3>Skills identified</h3>${skills.length ? skills.map(skill => '<div class="resume-skill"><span class="resume-chip">' + escapeHtml(skill.name) + ' · ' + escapeHtml(skill.proficiency) + '</span>' + (skill.evidence ? '<small>' + escapeHtml(skill.evidence) + '</small>' : '') + '</div>').join("") : "<p>No skills confidently extracted.</p>"}</section>
             <section class="resume-result-section"><h3>Education</h3>${renderList(candidate.education)}<h3>Experience</h3>${renderList(candidate.experience)}</section>
             <section class="resume-result-section"><h3>Projects</h3>${projects.length ? projects.map(project => '<p><strong>' + escapeHtml(project.name) + '</strong><br>' + escapeHtml(project.description) + '<br><small>' + escapeHtml((project.technologies || []).join(", ")) + '</small></p>').join("") : "<p>No projects identified.</p>"}</section>
-            <section class="resume-result-section"><h3>Achievements</h3>${renderList(candidate.achievements)}</section>
+            <section class="resume-result-section"><h3>Achievements</h3>${renderList(candidate.achievements)}<h3>What stands out</h3>${renderList(resume.strengths, "No specific strengths returned.")}</section>
             <section class="resume-result-section"><h3>Skills not evidenced</h3>${renderList(resume.missingSkills, "No obvious gaps suggested.")}</section>
             <section class="resume-result-section"><h3>Improvement suggestions</h3>${renderList(resume.feedback, "No suggestions returned.")}</section>
             <section class="resume-result-section"><h3>Resume-based interview questions</h3>${renderList(resume.interviewQuestions, "No questions generated.")}</section>
