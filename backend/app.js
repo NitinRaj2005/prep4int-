@@ -41,7 +41,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 hbs.registerPartials(path.join(__dirname, "views", "partials"));
 
-app.use(express.json({ limit: "10kb" }));
+app.use(express.json({ limit: "30kb" }));
 app.use(express.urlencoded({ extended: false, limit: "10kb", parameterLimit: 20 }));
 app.use(session({
     name: "prep4int.sid",
