@@ -402,12 +402,12 @@ app.post("/", registrationLimiter, async (req, res) => {
         email.length > 254 ||
         !validator.isEmail(email) ||
         !isValidPhone(phone) ||
-        password.length < 12 ||
+        password.length < 6 ||
         password.length > 128 ||
         password !== confirm
     ) {
         return res.status(400).send(
-            "Check your name, username, email, phone number, and password. Passwords must match and be 12-128 characters."
+            "Check your name, username, email, phone number, and password. Passwords must match and be 6-128 characters."
         );
     }
 
