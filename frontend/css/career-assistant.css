@@ -102,3 +102,5 @@ body{background:rgb(242,229,210)}
 .jd-question>strong{display:block;margin:12px 0 4px;color:#344c45;font-size:11px}
 .jd-question ul{margin:4px 0;padding-left:20px}
 .jd-question li{color:#53645e;font-size:11px;line-height:1.6}
+
+.jd-short-roadmap-warning{margin:18px 0 10px;padding:12px 15px;border-left:3px solid #d69a32;border-radius:7px;background:#fff7e8;color:#77551b;font-size:12px;line-height:1.6}
