@@ -1,13 +1,13 @@
 const allowedCategories = ["DSA", "OOP", "DBMS", "OS", "CN", "HR", "Mixed", "Resume-based"];
 const allowedDifficulties = ["Easy", "Medium", "Hard"];
-const allowedModes = ["text", "voice", "both"];
+const allowedModes = ["text", "voice", "both"];\nconst allowedDurations = [15, 20, 30];\nconst allowedQuestionLimits = [5, 10, 15];
 
 const validateStartInterview = (req, res, next) => {
     const body = req.body && typeof req.body === "object" ? req.body : {};
     const role = typeof body.role === "string" ? body.role.trim() : "";
     const category = typeof body.category === "string" ? body.category : "Mixed";
     const difficulty = typeof body.difficulty === "string" ? body.difficulty : "Medium";
-    const mode = typeof body.mode === "string" ? body.mode : "both";
+    const mode = typeof body.mode === "string" ? body.mode : "both";\n    const durationMinutes = Number(body.durationMinutes || 30);\n    const questionLimit = Number(body.questionLimit || 10);
 
     if (!role || role.length > 80) {
         return res.status(400).json({ error: "Enter a role between 1 and 80 characters." });
@@ -22,7 +22,7 @@ const validateStartInterview = (req, res, next) => {
         return res.status(400).json({ error: "Choose text, voice or both interview mode." });
     }
 
-    req.interviewSetup = { role, category, difficulty, mode };
+    if (!allowedDurations.includes(durationMinutes)) return res.status(400).json({ error: "Choose 15, 20 or 30 minutes." });\n    if (!allowedQuestionLimits.includes(questionLimit)) return res.status(400).json({ error: "Choose 5, 10 or 15 questions." });\n\n    req.interviewSetup = { role, category, difficulty, mode, durationMinutes, questionLimit };
     return next();
 };
 
