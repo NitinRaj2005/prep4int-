@@ -84,3 +84,7 @@ body {
   .mode-options { gap: 6px; }
   .mode-option span { font-size: 11px; }
 }
+.tailored-context-fields{margin-top:14px}
+.interview-context-hint{margin:-4px 0 14px;color:#71807a;font-size:11px;line-height:1.5}
+.tailored-context-fields select{width:100%;min-width:0}
+@media(max-width:640px){.tailored-context-fields{grid-template-columns:1fr}}
