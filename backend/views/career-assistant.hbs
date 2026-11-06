@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Career Assistant | Prep4Int</title>
+  <link rel="icon" type="image/x-icon" href="/img/fevi.png">
+  <link rel="stylesheet" href="/css/prep4int.css">
+  <link rel="stylesheet" href="/css/career-assistant.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li class="brand"><a class="brand-link" href="/index" aria-label="Prep4Int Home"><img src="/img/logo.png" alt="Prep4Int logo"><span>Prep4Int</span></a></li>
+      <div class="navi" aria-label="Main navigation">
+        <a class="main-nav-link" href="/index"><i class="fa-solid fa-house"></i><span>Home</span></a>
+        <a class="main-nav-link" href="/alltopics.html"><i class="fa-solid fa-layer-group"></i><span>Topics</span></a>
+        <a class="main-nav-link" href="/rec.html"><i class="fa-solid fa-book-open"></i><span>Recommendations</span></a>
+        <a class="main-nav-link" href="/que.html"><i class="fa-solid fa-code"></i><span>Practice Questions</span></a>
+        <a class="main-nav-link" href="/interview"><i class="fa-solid fa-robot"></i><span>AI Interview</span></a>
+        <a class="main-nav-link active" href="/career-assistant"><i class="fa-solid fa-brain"></i><span>Career Assistant</span></a>
+      </div>
+      <li class="account-menu">
+        <button class="account-menu-trigger" type="button" aria-expanded="false" aria-controls="account-dropdown"><span class="account-avatar"><i class="fa-solid fa-user"></i></span><span class="account-trigger-name" id="account-trigger-name">Account</span><i class="fa-solid fa-chevron-down account-chevron"></i></button>
+        <ul class="account-dropdown" id="account-dropdown" hidden>
+          <li class="account-menu-header"><span class="account-avatar account-avatar-large"><i class="fa-solid fa-user"></i></span><span><strong id="account-fullname">Your account</strong><small id="account-username">@username</small></span></li>
+          <li class="account-menu-divider" aria-hidden="true"></li>
+          <li><a href="/profile"><i class="fa-solid fa-user-pen"></i> My Profile</a></li>
+          <li><a href="/profile#account-settings"><i class="fa-solid fa-gear"></i> Account Settings</a></li>
+          <li><a href="/profile#dsa-progress"><i class="fa-solid fa-chart-simple"></i> My DSA Progress</a></li>
+          <li class="account-menu-divider" aria-hidden="true"></li>
+          <li><a class="account-logout" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="career-wrap">
+    <header class="career-hero">
+      <span class="career-kicker"><i class="fa-solid fa-wand-magic-sparkles"></i> PREP4INT AI</span>
+      <h1>AI Career Assistant</h1>
+      <p>Understand your strengths, discover skill gaps and prepare for the role you want.</p>
+    </header>
+
+    <section class="career-grid">
+      <article class="career-card">
+        <div class="career-icon"><i class="fa-solid fa-file-pdf"></i></div>
+        <span class="career-label">MODULE 01</span>
+        <h2>AI Resume Analyzer</h2>
+        <p>Upload your PDF resume to extract skills, review projects, identify missing skills and generate interview questions based on your experience.</p>
+        <ul><li>Skills and experience extraction</li><li>Resume score and improvement tips</li><li>Project-based interview questions</li></ul>
+        <span class="career-status"><i class="fa-solid fa-circle-check"></i> Foundation ready · AI analysis next</span>
+      </article>
+      <article class="career-card">
+        <div class="career-icon"><i class="fa-solid fa-bullseye"></i></div>
+        <span class="career-label">MODULE 02</span>
+        <h2>JD-Based Preparation</h2>
+        <p>Add a job description to identify required skills, compare your profile, generate role-specific questions and create a personalized preparation roadmap.</p>
+        <ul><li>Must-have and good-to-have skills</li><li>Resume-to-JD skill matching</li><li>Custom day-wise preparation plan</li></ul>
+        <span class="career-status"><i class="fa-solid fa-circle-check"></i> Foundation ready · AI analysis next</span>
+      </article>
+    </section>
+
+    <section class="career-next">
+      <div><span class="career-label">CONNECTED WORKFLOW</span><h2>From your resume to interview-ready</h2><p>Resume insights and job requirements will work together with your existing AI Mock Interview feature.</p></div>
+      <a href="/interview" class="career-interview-link"><i class="fa-solid fa-microphone-lines"></i> Open AI Mock Interview</a>
+    </section>
+    <p class="career-note"><i class="fa-solid fa-shield-halved"></i> Your resume file is validated in memory. Phase 1 saves only file metadata; the original PDF is not stored.</p>
+  </main>
+  <script src="/js/account-menu.js" defer></script>
+</body>
+</html>
