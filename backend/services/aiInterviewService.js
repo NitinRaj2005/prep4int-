@@ -9,7 +9,9 @@ const getGroqConfiguration = () => ({
     model: process.env.GROQ_MODEL || "openai/gpt-oss-120b"
 });
 
-const callGroq = async (messages, temperature = 0.4) => {
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const callGroq = async (messages, temperature = 0.4, maxCompletionTokens = 500) => {
     const { apiKey, model } = getGroqConfiguration();
     if (!apiKey) {
         const error = new Error("AI interview is not configured yet. Please contact the administrator.");
@@ -17,45 +19,77 @@ const callGroq = async (messages, temperature = 0.4) => {
         throw error;
     }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 25000);
-    try {
-        const response = await fetch(GROQ_URL, {
-            method: "POST",
-            headers: {
-                "Authorization": "Bearer " + apiKey,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                model,
-                messages,
-                temperature,
-                response_format: { type: "json_object" }
-            }),
-            signal: controller.signal
-        });
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok) {
-            console.error("Groq API error:", response.status, data && data.error ? data.error.message : "Unknown error");
-            const error = new Error("The AI service is temporarily unavailable. Please try again.");
-            error.statusCode = response.status === 429 ? 429 : 502;
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 30000);
+        try {
+            const response = await fetch(GROQ_URL, {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + apiKey,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model,
+                    messages,
+                    temperature,
+                    max_completion_tokens: maxCompletionTokens,
+                    response_format: { type: "json_object" }
+                }),
+                signal: controller.signal
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                const providerMessage = data && data.error ? data.error.message : "Unknown error";
+                console.error("Groq API error:", response.status, providerMessage);
+
+                if (response.status === 429 && attempt === 0) {
+                    const retryMatch = String(providerMessage).match(/try again in ([0-9.]+)s/i);
+                    const retryHeader = Number(response.headers.get("retry-after"));
+                    const retrySeconds = Number.isFinite(retryHeader) && retryHeader > 0
+                        ? retryHeader
+                        : (retryMatch ? Number(retryMatch[1]) : 0);
+                    if (retrySeconds > 0 && retrySeconds <= 15) {
+                        await wait(Math.ceil(retrySeconds * 1000) + 300);
+                        continue;
+                    }
+                }
+
+                const error = new Error("The AI service is temporarily unavailable. Please try again.");
+                error.statusCode = response.status === 429 ? 429 : 502;
+                throw error;
+            }
+            const content = data.choices && data.choices[0] && data.choices[0].message
+                ? data.choices[0].message.content : "";
+            if (!content) throw new Error("The AI service returned an empty response.");
+            return JSON.parse(content);
+        } catch (error) {
+            if (error.name === "AbortError") {
+                const timeoutError = new Error("The AI service took too long to respond. Please try again.");
+                timeoutError.statusCode = 504;
+                throw timeoutError;
+            }
             throw error;
+        } finally {
+            clearTimeout(timeout);
         }
-        const content = data.choices && data.choices[0] && data.choices[0].message
-            ? data.choices[0].message.content : "";
-        if (!content) throw new Error("The AI service returned an empty response.");
-        return JSON.parse(content);
-    } catch (error) {
-        if (error.name === "AbortError") {
-            const timeoutError = new Error("The AI service took too long to respond. Please try again.");
-            timeoutError.statusCode = 504;
-            throw timeoutError;
-        }
-        throw error;
-    } finally {
-        clearTimeout(timeout);
     }
+    const retryError = new Error("The AI service is busy. Please try again in a few seconds.");
+    retryError.statusCode = 429;
+    throw retryError;
 };
+
+const compactPreparationContext = context => ({
+    company: String(context && context.company || "").slice(0, 100),
+    skills: Array.isArray(context && context.skills) ? context.skills.slice(0, 15) : [],
+    resumeSkills: Array.isArray(context && context.resumeSkills) ? context.resumeSkills.slice(0, 20) : [],
+    projects: Array.isArray(context && context.projects) ? context.projects.slice(0, 3).map(project => ({
+        name: String(project.name || "").slice(0, 100),
+        description: String(project.description || "").slice(0, 350),
+        technologies: Array.isArray(project.technologies) ? project.technologies.slice(0, 8) : []
+    })) : [],
+    recommendations: Array.isArray(context && context.recommendations) ? context.recommendations.slice(0, 4) : []
+});
 
 const createInterviewSession = async (userId, setup) => InterviewSession.create({
     userId,
