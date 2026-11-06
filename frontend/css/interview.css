@@ -1,8 +1,12 @@
 :root {
+  --interview-page-bg: rgb(242, 229, 210);
   --interview-accent: #1abc9c;
   --interview-ink: #20302d;
   --interview-muted: #778581;
   --interview-border: #e2eae7;
+}
+body {
+  background-color: var(--interview-page-bg);
 }
 .interview-wrap {
   width: min(1120px, calc(100% - 36px));
