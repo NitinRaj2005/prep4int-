@@ -8,6 +8,19 @@ const jdSkillSchema = new mongoose.Schema({
     notes: { type: String, default: "", maxlength: 500 }
 }, { _id: false });
 
+const interviewQuestionSchema = new mongoose.Schema({
+    category: { type: String, enum: ["Technical", "Domain Knowledge", "Problem Solving", "Behavioral"], default: "Technical" },
+    question: { type: String, required: true, maxlength: 1000 },
+    difficulty: { type: String, enum: ["easy", "medium", "hard"], default: "medium" },
+    expectedAnswerPoints: { type: [String], default: [] }
+}, { _id: false });
+
+const recommendationSchema = new mongoose.Schema({
+    category: { type: String, enum: ["Technical", "Domain Knowledge", "Problem Solving", "Behavioral"], default: "Technical" },
+    priority: { type: String, enum: ["must-have", "important", "good-to-have"], default: "important" },
+    text: { type: String, required: true, maxlength: 600 }
+}, { _id: false });
+
 const roadmapTaskSchema = new mongoose.Schema({
     day: { type: Number, required: true, min: 1, max: 90 },
     title: { type: String, required: true, trim: true, maxlength: 180 },
@@ -27,9 +40,10 @@ const jdPreparationSchema = new mongoose.Schema({
     resumeAnalysisId: { type: mongoose.Schema.Types.ObjectId, ref: "ResumeAnalysis", default: null },
     matchPercentage: { type: Number, min: 0, max: 100, default: null },
     interviewQuestions: { type: [String], default: [] },
+    questionDetails: { type: [interviewQuestionSchema], default: [] },
     roadmapDays: { type: Number, min: 1, max: 90, default: 14 },
     roadmap: { type: [roadmapTaskSchema], default: [] },
-    recommendations: { type: [String], default: [] },
+    recommendations: { type: [recommendationSchema], default: [] },
     analyzedAt: { type: Date, default: null }
 }, { timestamps: true });
 
