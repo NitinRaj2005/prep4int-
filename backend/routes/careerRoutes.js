@@ -193,16 +193,46 @@ router.get("/jd/:id", async (req, res) => {
 router.put("/jd/:id/roadmap-days", validateRoadmapDays, async (req, res) => {
     if (!validId(req.params.id)) return res.status(400).json({ error: "Invalid JD preparation ID." });
     try {
-        const preparation = await JDPreparation.findOneAndUpdate(
-            { _id: req.params.id, userId: req.session.userId },
-            { $set: { roadmapDays: req.roadmapDays } },
-            { new: true, runValidators: true, projection: { roadmapDays: 1 } }
-        ).lean();
+        const preparation = await JDPreparation.findOne({ _id: req.params.id, userId: req.session.userId });
         if (!preparation) return res.status(404).json({ error: "JD preparation not found." });
-        return res.json({ roadmapDays: preparation.roadmapDays });
+        const resume = preparation.resumeAnalysisId
+            ? await ResumeAnalysis.findOne({ _id: preparation.resumeAnalysisId, userId: req.session.userId, status: "completed" }).lean()
+            : null;
+        const raw = await analyzeJobDescription({
+            company: preparation.company,
+            role: preparation.role,
+            jobDescription: preparation.jobDescription,
+            experienceLevel: preparation.experienceLevel,
+            roadmapDays: req.roadmapDays,
+            resume
+        });
+        const analysis = normalizeJDAnalysis(raw, req.roadmapDays, Boolean(resume));
+        preparation.set({ ...analysis, roadmapDays: req.roadmapDays, status: "completed", analyzedAt: new Date() });
+        await preparation.save();
+        return res.json({ preparation });
     } catch (error) {
-        console.error("Updating roadmap duration failed:", error.message);
-        return res.status(500).json({ error: "Unable to update roadmap duration." });
+        console.error("Regenerating preparation roadmap failed:", error.message);
+        return res.status(error.statusCode || 500).json({ error: error.statusCode ? error.message : "Unable to regenerate the roadmap." });
+    }
+});
+
+router.patch("/jd/:id/roadmap/:day", async (req, res) => {
+    if (!validId(req.params.id)) return res.status(400).json({ error: "Invalid JD preparation ID." });
+    const day = Number(req.params.day);
+    if (!Number.isInteger(day) || day < 1 || day > 90 || typeof req.body.completed !== "boolean") {
+        return res.status(400).json({ error: "Provide a valid roadmap day and completion status." });
+    }
+    try {
+        const preparation = await JDPreparation.findOne({ _id: req.params.id, userId: req.session.userId });
+        if (!preparation) return res.status(404).json({ error: "JD preparation not found." });
+        const task = preparation.roadmap.find(item => item.day === day);
+        if (!task) return res.status(404).json({ error: "Roadmap task not found." });
+        task.completed = req.body.completed;
+        await preparation.save();
+        return res.json({ day, completed: task.completed });
+    } catch (error) {
+        console.error("Updating roadmap progress failed:", error.message);
+        return res.status(500).json({ error: "Unable to update roadmap progress." });
     }
 });
 
