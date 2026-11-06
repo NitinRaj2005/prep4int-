@@ -118,7 +118,29 @@ router.get("/resume/:id", async (req, res) => {
     }
 });
 
-router.post("/jd/analyze", careerLimiter, validateJobDescription, async (req, res) => {
+const parseJDInput = (req, res, next) => {
+    pdfUpload.single("jdPdf")(req, res, async (uploadError) => {
+        if (uploadError) {
+            const message = uploadError.code === "LIMIT_FILE_SIZE"
+                ? "Job description PDF must be 5 MB or smaller."
+                : uploadError.message || "Unable to upload this job description PDF.";
+            return res.status(400).json({ error: message });
+        }
+        try {
+            if (req.file) {
+                if (!isPdf(req.file.buffer)) return res.status(400).json({ error: "The uploaded job description is not a valid PDF." });
+                req.body.jobDescription = await extractPdfText(req.file.buffer);
+                req.body.jdFileName = req.file.originalname;
+            }
+            return validateJobDescription(req, res, next);
+        } catch (error) {
+            console.error("JD PDF extraction failed:", error.message);
+            return res.status(error.statusCode || 400).json({ error: error.statusCode ? error.message : "Could not read this job description PDF." });
+        }
+    });
+};
+
+router.post("/jd/analyze", careerLimiter, parseJDInput, async (req, res) => {
     let preparation;
     try {
         const roadmapDays = Number.isInteger(Number(req.body.roadmapDays)) && Number(req.body.roadmapDays) >= 1 && Number(req.body.roadmapDays) <= 90
