@@ -175,17 +175,20 @@ const analyzeJobDescription = async ({ company, role, jobDescription, experience
 };
 
 const normalizeJDAnalysis = (raw, roadmapDays, hasResume) => {
+    raw = raw && typeof raw === "object" ? raw : {};
     const strings = (value, max, length) => Array.isArray(value)
         ? value.filter(item => typeof item === "string" && item.trim()).slice(0, max).map(item => item.trim().slice(0, length))
         : [];
     const allowedCategories = ["Technical", "Domain Knowledge", "Problem Solving", "Behavioral"];
-    const skills = Array.isArray(raw.skills) ? raw.skills.slice(0, 30).filter(item => item && typeof item.name === "string").map(item => ({
+    const priorities = ["must-have", "important", "good-to-have"];
+    const skills = Array.isArray(raw.skills) ? raw.skills.slice(0, 30).filter(item => item && typeof item.name === "string" && item.name.trim()).map(item => ({
         name: item.name.trim().slice(0, 100),
         category: allowedCategories.includes(item.category) ? item.category : "Technical",
-        priority: ["must-have", "important", "good-to-have"].includes(item.priority) ? item.priority : "important",
+        priority: priorities.includes(item.priority) ? item.priority : "important",
         status: hasResume && ["matched", "needs-improvement", "missing"].includes(item.status) ? item.status : "not-assessed",
         notes: typeof item.notes === "string" ? item.notes.slice(0, 500) : ""
     })) : [];
+
     let totalWeight = 0;
     let earnedWeight = 0;
     if (hasResume) skills.forEach(skill => {
@@ -194,28 +197,92 @@ const normalizeJDAnalysis = (raw, roadmapDays, hasResume) => {
         totalWeight += weight;
         earnedWeight += weight * (skill.status === "matched" ? 1 : skill.status === "needs-improvement" ? 0.5 : 0);
     });
-    const questionDetails = Array.isArray(raw.interviewQuestions) ? raw.interviewQuestions.slice(0, 12).filter(item => item && typeof item.question === "string").map(item => ({
-        category: allowedCategories.includes(item.category) ? item.category : "Technical",
-        question: item.question.trim().slice(0, 1000),
-        difficulty: ["easy", "medium", "hard"].includes(item.difficulty) ? item.difficulty : "medium",
-        expectedAnswerPoints: strings(item.expectedAnswerPoints, 6, 300)
-    })) : [];
+
+    const questionDetails = Array.isArray(raw.interviewQuestions)
+        ? raw.interviewQuestions.slice(0, 12).filter(item => item && typeof item.question === "string" && item.question.trim()).map(item => {
+            const category = allowedCategories.includes(item.category) ? item.category : "Technical";
+            let points = strings(item.expectedAnswerPoints, 6, 300);
+            if (points.length < 3) {
+                points = category === "Behavioral"
+                    ? ["Set the situation and goal clearly", "Explain your specific action and decisions", "Describe collaboration, communication and challenges", "Share the measurable result and what you learned"]
+                    : category === "Domain Knowledge"
+                        ? ["Define the key domain concepts and terminology", "Explain the relevant workflow and stakeholders", "Discuss applicable data, security or compliance considerations", "Give a practical example and explain trade-offs"]
+                        : ["Explain the core concept and how it works", "Describe the approach or architecture step by step", "Give a practical example from a project", "Discuss complexity, trade-offs, testing and edge cases"];
+            }
+            return {
+                category,
+                question: item.question.trim().slice(0, 1000),
+                difficulty: ["easy", "medium", "hard"].includes(item.difficulty) ? item.difficulty : "medium",
+                expectedAnswerPoints: points.slice(0, 5)
+            };
+        }) : [];
+
+    // If the model returns no questions, build a small role-specific set from extracted JD skills.
+    if (!questionDetails.length) {
+        skills.slice(0, 5).forEach(skill => questionDetails.push({
+            category: skill.category,
+            question: "Explain " + skill.name + " and how you would apply it in this role.",
+            difficulty: "medium",
+            expectedAnswerPoints: [
+                "Define the concept and its important components",
+                "Explain a practical implementation or workflow",
+                "Discuss common challenges and trade-offs",
+                "Relate the answer to the responsibilities in this job description"
+            ]
+        }));
+    }
+
     const sourceRoadmap = Array.isArray(raw.roadmap) ? raw.roadmap.slice(0, roadmapDays) : [];
+    const gapSkills = skills
+        .filter(skill => skill.status === "missing" || skill.status === "needs-improvement" || skill.status === "not-assessed")
+        .sort((a, b) => priorities.indexOf(a.priority) - priorities.indexOf(b.priority));
+    const fallbackTopics = gapSkills.length
+        ? gapSkills.map(skill => skill.name)
+        : skills.slice(0, 5).map(skill => skill.name);
     const roadmap = Array.from({ length: roadmapDays }, (_, index) => {
-        const item = sourceRoadmap[index] || {};
+        const item = sourceRoadmap[index] && typeof sourceRoadmap[index] === "object" ? sourceRoadmap[index] : {};
+        const start = Math.floor(index * Math.max(fallbackTopics.length, 1) / roadmapDays);
+        const finish = Math.max(start + 1, Math.ceil((index + 1) * Math.max(fallbackTopics.length, 1) / roadmapDays));
+        const dayTopics = fallbackTopics.slice(start, finish);
+        const fallbackTitle = roadmapDays === 1
+            ? "Priority gap revision and interview practice"
+            : index === roadmapDays - 1
+                ? "Revision, practical assessment and mock interview"
+                : "Build skills: " + (dayTopics.slice(0, 2).join(" and ") || "role fundamentals");
         return {
             day: index + 1,
-            title: typeof item.title === "string" ? item.title.slice(0, 180) : "Review and practice key role skills",
-            description: typeof item.description === "string" ? item.description.slice(0, 1200) : "Revise relevant topics, solve practical questions and note areas that need more practice.",
-            topics: strings(item.topics, 10, 100),
-            completed: false
+            title: typeof item.title === "string" && item.title.trim() ? item.title.slice(0, 180) : fallbackTitle,
+            description: typeof item.description === "string" && item.description.trim()
+                ? item.description.slice(0, 1200)
+                : (dayTopics.length ? "Focus on " + dayTopics.join(", ") + ". Study the fundamentals, practise a small hands-on task, and prepare to explain your approach in an interview." : "Review the key responsibilities in the job description, practise role-specific questions, and complete a short mock interview."),
+            topics: strings(item.topics, 10, 100).length ? strings(item.topics, 10, 100) : dayTopics.slice(0, 10),
+            completed: Boolean(item.completed)
         };
     });
-    const recommendations = Array.isArray(raw.recommendations) ? raw.recommendations.slice(0, 15).filter(item => item && typeof item.text === "string").map(item => ({
-        category: allowedCategories.includes(item.category) ? item.category : "Technical",
-        priority: ["must-have", "important", "good-to-have"].includes(item.priority) ? item.priority : "important",
-        text: item.text.trim().slice(0, 600)
-    })) : [];
+
+    let recommendations = Array.isArray(raw.recommendations)
+        ? raw.recommendations.slice(0, 15).filter(item => item && typeof item.text === "string" && item.text.trim()).map(item => ({
+            category: allowedCategories.includes(item.category) ? item.category : "Technical",
+            priority: priorities.includes(item.priority) ? item.priority : "important",
+            text: item.text.trim().slice(0, 600)
+        })) : [];
+
+    // Never leave the recommendations panel empty when the JD has identifiable skill gaps.
+    if (!recommendations.length) {
+        recommendations = gapSkills.slice(0, 8).map(skill => ({
+            category: skill.category,
+            priority: skill.priority,
+            text: "Build evidence for " + skill.name + " through a focused hands-on exercise, then add the specific implementation and outcome to your resume."
+        }));
+        if (!recommendations.length) {
+            recommendations = [{
+                category: "Technical",
+                priority: "important",
+                text: "Review the required skills in this job description, prepare one practical example for each major requirement, and practise explaining your design choices and trade-offs."
+            }];
+        }
+    }
+
     return {
         matchPercentage: hasResume && totalWeight ? Math.round(earnedWeight / totalWeight * 100) : 0,
         skills,
