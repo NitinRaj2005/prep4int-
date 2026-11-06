@@ -52,7 +52,7 @@ router.post("/resume/upload", resumeUploadLimiter, (req, res, next) => {
     try {
         record = await ResumeAnalysis.create({
             userId: req.session.userId,
-            originalFileName: req.file.originalname.replace(/[\\/\\0-\\x1f]/g, "_").slice(0, 180) || "resume.pdf",
+            originalFileName: req.file.originalname.replace(/[\/\\\0-\x1f]/g, "_").slice(0, 180) || "resume.pdf",
             fileSize: req.file.size,
             status: "processing"
         });
