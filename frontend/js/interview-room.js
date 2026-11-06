@@ -4,7 +4,8 @@
   const id = root.dataset.sessionId;
   const $ = (name) => document.getElementById(name);
   let questionNumber = 1;
-  let recognition = null;\n  let lastAnswerMode = "text";
+  let recognition = null;
+  let lastAnswerMode = "text";
   let timerSeconds = 30 * 60;
   let timerHandle = null;
   const setError = message => { $("room-error").textContent = message || ""; };
@@ -81,7 +82,8 @@
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) { $("voice-status").textContent = "Voice input is not supported here. Try Chrome or Edge."; return; }
     if (recognition) { recognition.stop(); recognition = null; $("voice-answer").innerHTML = '<i class="fa-solid fa-microphone"></i> Speak answer'; return; }
-    lastAnswerMode = "voice";\n    recognition = new SpeechRecognition(); recognition.lang = "en-IN"; recognition.continuous = true; recognition.interimResults = true;
+    lastAnswerMode = "voice";
+    recognition = new SpeechRecognition(); recognition.lang = "en-IN"; recognition.continuous = true; recognition.interimResults = true;
     const button = $("voice-answer"); button.innerHTML = '<i class="fa-solid fa-stop"></i> Stop recording'; $("voice-status").textContent = "Listening…";
     recognition.onresult = event => { let text = ""; for (let i=0;i<event.results.length;i++) text += event.results[i][0].transcript + (event.results[i].isFinal ? " " : ""); $("candidate-answer").value = text.slice(0,10000); };
     recognition.onerror = () => { $("voice-status").textContent = "Could not capture audio. Check microphone permission."; button.innerHTML = '<i class="fa-solid fa-microphone"></i> Speak answer'; recognition = null; };
