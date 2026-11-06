@@ -58,11 +58,22 @@
         <h2>JD-Based Preparation</h2>
         <p>Add a job description to identify required skills, compare your profile, generate role-specific questions and create a personalized preparation roadmap.</p>
         <ul><li>Must-have and good-to-have skills</li><li>Resume-to-JD skill matching</li><li>Custom day-wise preparation plan</li></ul>
-        <span class="career-status"><i class="fa-solid fa-circle-check"></i> Phase 3 · JD analysis coming next</span>
+        <form id="jd-analysis-form" class="jd-analysis-form">
+          <label for="jd-company">Company (optional)</label><input id="jd-company" name="company" type="text" maxlength="120" placeholder="e.g. Google">
+          <label for="jd-role">Job role</label><input id="jd-role" name="role" type="text" maxlength="120" required placeholder="e.g. Software Engineer Intern">
+          <label for="jd-level">Experience level</label><select id="jd-level" name="experienceLevel"><option value="intern">Intern</option><option value="entry" selected>Entry level</option><option value="mid">Mid level</option><option value="senior">Senior</option><option value="unspecified">Not specified</option></select>
+          <label for="jd-resume">Resume to compare</label><select id="jd-resume" name="resumeAnalysisId"><option value="">Use latest analyzed resume automatically</option></select>
+          <label for="jd-days">Preparation roadmap duration: <strong id="jd-days-value">14 days</strong></label><input id="jd-days" name="roadmapDays" type="range" min="1" max="90" value="14">
+          <label for="jd-text">Paste job description (100–20,000 characters)</label><textarea id="jd-text" name="jobDescription" rows="7" minlength="100" maxlength="20000" required placeholder="Paste the complete job description here..."></textarea>
+          <button type="submit" id="jd-analyze-button"><i class="fa-solid fa-bullseye"></i> Analyze Job Description</button>
+          <p id="jd-analysis-status" class="resume-upload-status" role="status" aria-live="polite"></p>
+        </form>
       </article>
     </section>
 
     <section id="resume-results" class="resume-results" hidden aria-live="polite"></section>
+    <section id="jd-results" class="jd-results" hidden aria-live="polite"></section>
+    <section id="jd-history" class="resume-history"><h2>Recent JD Preparations</h2><div id="jd-history-list">Loading your JD history...</div></section>
     <section id="resume-history" class="resume-history"><h2>Recent Resume Analyses</h2><div id="resume-history-list">Loading your history...</div></section>
 
     <section class="career-next">
