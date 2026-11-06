@@ -63,6 +63,25 @@
             </div>
           </div>
 
+          <div class="interview-field-grid session-choice-grid">
+            <div>
+              <label for="interview-duration">Interview duration</label>
+              <select id="interview-duration" name="durationMinutes">
+                <option value="15">15 minutes</option>
+                <option value="20">20 minutes</option>
+                <option value="30" selected>30 minutes</option>
+              </select>
+            </div>
+            <div>
+              <label for="interview-question-limit">Number of questions</label>
+              <select id="interview-question-limit" name="questionLimit">
+                <option value="5">5 questions</option>
+                <option value="10" selected>10 questions</option>
+                <option value="15">15 questions</option>
+              </select>
+            </div>
+          </div>
+
           <label>Interview mode</label>
           <div class="mode-options">
             <label class="mode-option"><input type="radio" name="mode" value="text"><span><i class="fa-regular fa-message"></i> Text</span></label>
@@ -71,8 +90,8 @@
           </div>
 
           <div class="session-summary">
-            <div><strong>30 min</strong><span>Duration</span></div>
-            <div><strong>10</strong><span>Main questions</span></div>
+            <div><strong id="summary-duration">30 min</strong><span>Duration</span></div>
+            <div><strong id="summary-questions">10</strong><span>Main questions</span></div>
             <div><strong>Detailed</strong><span>AI report</span></div>
           </div>
 
@@ -89,7 +108,7 @@
           <h2>How it works</h2>
           <ol>
             <li><span>1</span>Choose your target role and interview category.</li>
-            <li><span>2</span>Start a 30-minute practice session.</li>
+            <li><span>2</span>Complete your selected timed interview session.</li>
             <li><span>3</span>Answer questions using text or voice.</li>
             <li><span>4</span>Review your detailed performance report.</li>
           </ol>
