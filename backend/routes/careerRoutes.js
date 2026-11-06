@@ -4,7 +4,7 @@ const { rateLimit } = require("express-rate-limit");
 const ResumeAnalysis = require("../models/models/resumeAnalysis");
 const JDPreparation = require("../models/models/jdPreparation");
 const { validateJobDescription, validateRoadmapDays } = require("../middleware/careerValidation");
-const { extractPdfText, analyzeResumeText, normalizeResumeAnalysis } = require("../services/aiCareerService");
+const { extractPdfText, analyzeResumeText, normalizeResumeAnalysis, analyzeJobDescription, normalizeJDAnalysis } = require("../services/aiCareerService");
 
 const router = express.Router();
 const pdfUpload = multer({
@@ -119,16 +119,50 @@ router.get("/resume/:id", async (req, res) => {
 });
 
 router.post("/jd/analyze", careerLimiter, validateJobDescription, async (req, res) => {
+    let preparation;
     try {
-        const preparation = await JDPreparation.create({
+        const roadmapDays = Number.isInteger(Number(req.body.roadmapDays)) && Number(req.body.roadmapDays) >= 1 && Number(req.body.roadmapDays) <= 90
+            ? Number(req.body.roadmapDays) : 14;
+        let resume = null;
+        let resumeAnalysisId = null;
+        if (req.body.resumeAnalysisId) {
+            if (!validId(req.body.resumeAnalysisId)) return res.status(400).json({ error: "Invalid resume analysis ID." });
+            resume = await ResumeAnalysis.findOne({ _id: req.body.resumeAnalysisId, userId: req.session.userId, status: "completed" }).lean();
+            if (!resume) return res.status(404).json({ error: "Selected resume analysis was not found." });
+            resumeAnalysisId = resume._id;
+        } else {
+            resume = await ResumeAnalysis.findOne({ userId: req.session.userId, status: "completed" }).sort({ analyzedAt: -1 }).lean();
+            if (resume) resumeAnalysisId = resume._id;
+        }
+
+        preparation = await JDPreparation.create({
             userId: req.session.userId,
             ...req.validatedJD,
-            status: "draft"
+            resumeAnalysisId,
+            roadmapDays,
+            status: "analyzing"
         });
-        return res.status(201).json({ message: "Job description saved. AI analysis will be enabled in Phase 3.", preparation: { id: preparation._id, company: preparation.company, role: preparation.role, status: preparation.status, createdAt: preparation.createdAt } });
+        const raw = await analyzeJobDescription({
+            ...req.validatedJD,
+            roadmapDays,
+            resume
+        });
+        const analysis = normalizeJDAnalysis(raw, roadmapDays, Boolean(resume));
+        preparation.set({ ...analysis, status: "completed", analyzedAt: new Date() });
+        await preparation.save();
+        return res.status(201).json({
+            message: "Job description analyzed successfully.",
+            preparation
+        });
     } catch (error) {
-        console.error("Saving job description failed:", error.message);
-        return res.status(500).json({ error: "Unable to save this job description." });
+        console.error("JD preparation analysis failed:", error.message);
+        if (preparation) {
+            preparation.status = "failed";
+            await preparation.save().catch(saveError => console.error("Saving JD failure status failed:", saveError.message));
+        }
+        return res.status(error.statusCode || 500).json({
+            error: error.statusCode ? error.message : "Unable to analyze this job description. Please try again."
+        });
     }
 });
 
