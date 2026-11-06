@@ -12,6 +12,7 @@ const passwordForBcrypt = require("./utils/password");
 const { mongoURI, connectToDatabase } = require("./db/db/conn");
 const Register = require("./models/models/registers");
 const ContactUs = require("./models/models/contactus");
+const interviewRoutes = require("./routes/interviewRoutes");
 
 const app = express();
 const profilePhotoUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 400 * 1024, files: 1 } });
@@ -111,6 +112,14 @@ const requireAuthenticatedUser = (req, res, next) => {
     }
     return next();
 };
+
+// AI Mock Interview APIs are isolated behind the existing session authentication.
+app.use("/api/interview", requireAuthenticatedUser, interviewRoutes);
+
+app.get("/interview", (req, res) => {
+    if (!req.session.userId) return res.redirect("/login");
+    return res.render("interview");
+});
 
 app.get("/", (req, res) => {
     res.render("register");
