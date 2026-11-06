@@ -1720,16 +1720,41 @@ nav.home-page-nav > ul > .navi > .main-nav-link:last-child {
 }
 
 
-/* AI Mock Interview card on the home page */
+
+/* Home page cards: keep all four cards visually aligned */
+#dabba {
+    align-items: stretch;
+    grid-auto-rows: 1fr;
+}
+#dabba > .rounded {
+    min-width: 0;
+    height: 100%;
+}
+#dabba .box11 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+#dabba .box11 > .px-6 {
+    flex: 1 1 auto;
+}
+#dabba .box11 > img.amans {
+    display: block;
+    width: 100%;
+    height: 265px;
+    object-fit: cover;
+}
 .interview-card-visual {
-    min-height: 335px;
+    min-height: 265px;
+    height: 265px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 22px;
     padding: 20px;
-    box-sizing: border-box;
     background: linear-gradient(135deg, #242424, #555);
     color: #f4df9a;
     font-family: Georgia, serif;
@@ -1741,9 +1766,18 @@ nav.home-page-nav > ul > .navi > .main-nav-link:last-child {
     color: #19b99b;
     font-size: clamp(72px, 7vw, 104px);
 }
-#dabba > .rounded { min-width: 0; }
-#dabba .box11 { height: 100%; display: flex; flex-direction: column; }
-#dabba .box11 > .px-6 { flex: 1 1 auto; }
+#dabba .box11 > .px-6 p {
+    line-height: 1.55;
+}
+#dabba .box11 > .but {
+    margin-top: auto;
+    padding: 0 12px 18px;
+}
 @media (max-width: 767px) {
-    .interview-card-visual { min-height: 230px; }
+    #dabba { grid-auto-rows: auto; }
+    #dabba .box11 > img.amans,
+    .interview-card-visual {
+        height: 230px;
+        min-height: 230px;
+    }
 }
