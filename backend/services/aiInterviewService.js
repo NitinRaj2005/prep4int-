@@ -124,12 +124,12 @@ const generateQuestion = async (session) => {
                 difficulty: session.difficulty,
                 questionNumber: history.length + 1,
                 totalQuestions: session.questionLimit,
-                previousQuestionsAndAnswers: history,
-                preparationContext: session.preparationContext || {},
+                previousQuestionsAndAnswers: history.slice(-3).map(item => ({ question: item.question, answer: String(item.answer || "").slice(0, 400) })),
+                preparationContext: compactPreparationContext(session.preparationContext),
                 instruction: "Generate the next interview question suitable for this candidate."
             })
         }
-    ]);
+    ], 0.5, 180);
     if (typeof result.question !== "string" || !result.question.trim()) {
         throw new Error("AI could not generate a valid interview question.");
     }
@@ -150,10 +150,10 @@ const evaluateAnswer = async (session, question, answer) => {
                 difficulty: session.difficulty,
                 question,
                 candidateAnswer: answer,
-                preparationContext: session.preparationContext || {}
+                preparationContext: compactPreparationContext(session.preparationContext)
             })
         }
-    ]);
+    ], 0.3, 450);
     const score = Number(result.score);
     if (!Number.isFinite(score)) throw new Error("AI returned an invalid evaluation.");
     return {
@@ -177,11 +177,11 @@ const createFinalReport = async (session) => {
                 role: session.role,
                 category: session.category,
                 difficulty: session.difficulty,
-                preparationContext: session.preparationContext || {},
-                answers: session.questions.map(q => ({ question: q.question, answer: q.answer, score: q.score, feedback: q.feedback }))
+                preparationContext: compactPreparationContext(session.preparationContext),
+                answers: session.questions.slice(-10).map(q => ({ question: q.question, answer: q.answer, score: q.score, feedback: q.feedback }))
             })
         }
-    ]);
+    ], 0.3, 650);
     const score = value => Number.isFinite(Number(value)) ? Math.max(0, Math.min(100, Math.round(Number(value)))) : 0;
     const strings = value => Array.isArray(value) ? value.filter(item => typeof item === "string").slice(0, 8) : [];
     return {
