@@ -169,33 +169,3 @@ body{background:rgb(242,229,210)}
 @media(max-width:900px){.jd-skills-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.jd-roadmap-list{grid-template-columns:1fr}}
 @media(max-width:700px){.career-wrap{width:min(100% - 28px,620px);margin:24px auto 48px}.career-hero{padding:23px 21px}.career-card{padding:22px}.career-card>p{min-height:0}.jd-results:not([hidden]),.resume-results,.resume-history{padding:19px}.jd-result-heading{align-items:flex-start;flex-direction:column}.jd-match-score{font-size:32px}.jd-report-section{padding:17px}.jd-skills-grid,.jd-recommendations-grid,.jd-questions-grid{grid-template-columns:1fr}.jd-roadmap{padding:18px}.jd-roadmap-header{align-items:stretch}.jd-roadmap-header>div{width:100%}#jd-roadmap-duration-form{width:100%;box-sizing:border-box;justify-content:space-between}.jd-roadmap-task{min-height:0}}
 @media(prefers-reduced-motion:reduce){.career-card,.resume-upload-form button,.jd-analysis-form button,.jd-roadmap-header button,.jd-roadmap-task{transition:none}}
-
-
-/* Warm-golden Career Assistant visual system */
-body:has(.career-wrap){background:#fbf6ec;color:#302719}
-.career-wrap{width:min(1320px,calc(100% - 48px));margin:34px auto 72px}
-.career-hero{border-color:#eadfc9;background:linear-gradient(125deg,#fffdf8 0%,#f7edd8 100%);box-shadow:0 12px 32px rgba(80,59,24,.07)}
-.career-kicker,.career-label{color:#9a742d}
-.career-hero h1,.career-card h2,.career-next h2{color:#302719}
-.career-card,.resume-results,.resume-history{border:1px solid #eadfc9;background:#fffdf8;box-shadow:0 12px 30px rgba(80,59,24,.06)}
-.career-card:hover{box-shadow:0 16px 34px rgba(80,59,24,.1)}
-.career-icon{background:#f4e8ca!important;color:#9a742d!important}
-.resume-upload-form,.jd-analysis-form{border-color:#eadfc9;background:#fcf8ef}
-.resume-upload-form label,.jd-analysis-form label{color:#55462c}
-.resume-upload-form input,.jd-analysis-form input,.jd-analysis-form select,.jd-analysis-form textarea{border-color:#e4d6b8;background:#fffdf8;color:#302719}
-.resume-upload-form button,.jd-analysis-form button,.jd-roadmap-header button,.career-interview-link{background:#c9a24e;color:#302719;border:1px solid #b88e39}
-.resume-upload-form button:hover,.jd-analysis-form button:hover,.jd-roadmap-header button:hover,.career-interview-link:hover{background:#b98e37;color:#fff}
-.jd-results:not([hidden]){border-color:#eadfc9;background:#fffdf8}
-.jd-report-section,.jd-skill-row,.jd-recommendation,.jd-question{border-color:#eee4d1;background:#fffdf8}
-.jd-section-icon{background:#f4e8ca;color:#9a742d}
-.jd-match-score{color:#9a742d;border-color:#ead9b5;background:#fbf3e2}
-.jd-roadmap{border-color:#eadfc9;background:linear-gradient(145deg,#f8f0df,#fffaf1)}
-.jd-roadmap-task{border-color:#eee4d1;background:#fffdf8}
-.jd-progress-track,.score-track{background:#eee5d4}
-.jd-progress-track span,.score-track span{background:#c9a24e}
-.jd-matched{background:#edf5e8;color:#587a3b}
-.jd-needs-improvement{background:#fff3d9;color:#986d18}
-.jd-missing{background:#fbeae4;color:#a64d3d}
-.career-next{border:1px solid #eadfc9;background:#fffaf0}
-.career-note{color:#766b58}
-@media(max-width:700px){.career-wrap{width:calc(100% - 28px)}}
