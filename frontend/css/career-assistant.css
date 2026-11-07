@@ -104,3 +104,68 @@ body{background:rgb(242,229,210)}
 .jd-question li{color:#53645e;font-size:11px;line-height:1.6}
 
 .jd-short-roadmap-warning{margin:18px 0 10px;padding:12px 15px;border-left:3px solid #d69a32;border-radius:7px;background:#fff7e8;color:#77551b;font-size:12px;line-height:1.6}
+
+
+/* Career Assistant: refined report layout */
+.career-wrap{width:min(1240px,calc(100% - 48px));margin:42px auto 76px}
+.career-hero{padding:30px 34px;margin-bottom:26px;border:1px solid rgba(226,234,231,.9);border-radius:22px;background:linear-gradient(125deg,#fff 0%,#f4fbf8 100%);box-shadow:0 12px 34px rgba(26,65,56,.055)}
+.career-hero h1{letter-spacing:-1.2px;font-weight:800}
+.career-hero p{max-width:680px}
+.career-grid{align-items:stretch;gap:24px}
+.career-card{padding:30px;border-radius:20px;box-shadow:0 12px 34px rgba(26,65,56,.06);transition:transform .2s ease,box-shadow .2s ease}
+.career-card:hover{transform:translateY(-2px);box-shadow:0 16px 38px rgba(26,65,56,.09)}
+.career-card h2{font-size:23px;letter-spacing:-.35px}
+.career-card>p{min-height:68px}
+.career-card ul{gap:11px;line-height:1.55}
+.career-icon{width:48px;height:48px;margin-bottom:16px}
+.resume-upload-form,.jd-analysis-form{padding:19px;border-radius:14px}
+.resume-upload-form button,.jd-analysis-form button,.jd-roadmap-header button{transition:background .18s ease,transform .18s ease}
+.resume-upload-form button:hover,.jd-analysis-form button:hover,.jd-roadmap-header button:hover{background:#128c75;transform:translateY(-1px)}
+.resume-results,.resume-history,.jd-results:not([hidden]){padding:30px;border-radius:20px;box-shadow:0 12px 34px rgba(26,65,56,.055)}
+.jd-results:not([hidden]){display:grid;gap:22px}
+.jd-result-heading{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:4px 0 22px;border-bottom:1px solid #edf1ef}
+.jd-result-heading h2{margin:8px 0;font-size:clamp(22px,3vw,29px);letter-spacing:-.5px}
+.jd-result-heading p{margin:0;color:#778581;font-size:13px;text-transform:capitalize}
+.jd-result-heading p span{padding:0 5px;color:#b0bbb6}
+.jd-match-score{flex:0 0 auto;min-width:132px;margin:0;padding:15px 18px;border:1px solid #dcefe8;border-radius:15px;background:#f2faf6;text-align:center;font-size:38px;line-height:1.1}
+.jd-match-score small{margin-top:7px}
+.jd-report-section{min-width:0;padding:22px;border:1px solid #e9efec;border-radius:16px;background:#fff}
+.jd-section-heading{display:flex;align-items:center;gap:13px;margin-bottom:18px}
+.jd-section-icon{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border-radius:12px;background:#eaf8f4;color:#159d83;font-size:16px}
+.jd-section-heading h3{margin:0 0 4px;color:#263b34;font-size:17px}
+.jd-section-heading p{margin:0;color:#82908a;font-size:12px;line-height:1.5}
+.jd-skills-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.jd-skill-row{min-height:100px;box-sizing:border-box;padding:15px;border:1px solid #e8efec;border-radius:12px;background:#fbfdfc}
+.jd-skill-copy{min-width:0}
+.jd-skill-row strong{font-size:13px;line-height:1.45}
+.jd-skill-row small{font-size:10px;text-transform:capitalize}
+.jd-skill-row p{margin:7px 0 0;font-size:11px;line-height:1.55;overflow-wrap:anywhere}
+.jd-skill-row .jd-status{margin-top:10px}
+.jd-recommendations-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.jd-recommendation{min-width:0;padding:15px;border:1px solid #e8efec;border-radius:12px;background:#fbfdfc}
+.jd-recommendation small{margin-left:7px}
+.jd-recommendation p{font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.jd-questions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.jd-question{margin:0;padding:15px;border:1px solid #e8efec;border-radius:12px;background:#fbfdfc}
+.jd-question[open]{background:#fff}
+.jd-question summary{font-size:13px}
+.jd-question>p,.jd-question li{font-size:12px;line-height:1.7}
+.jd-roadmap{margin-top:0;padding:25px;border:1px solid #e2ece7;border-radius:17px;background:linear-gradient(145deg,#f5faf7,#f9fcfb)}
+.jd-roadmap-header{align-items:center}
+.jd-roadmap-header h3{margin-top:6px;font-size:20px;letter-spacing:-.3px}
+.jd-roadmap-header p{font-size:12px}
+#jd-roadmap-duration-form{padding:9px 11px;border:1px solid #e2ece7;border-radius:11px;background:#fff}
+#jd-roadmap-duration-form input{width:58px;padding:8px;text-align:center}
+#jd-roadmap-duration-form>span{color:#71807a;font-size:11px}
+.jd-roadmap-header button{padding:10px 14px}
+.jd-progress-track{height:9px;margin:20px 0}
+.jd-roadmap-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.jd-roadmap-task{min-height:90px;padding:15px;border-radius:12px;transition:border-color .18s ease,box-shadow .18s ease}
+.jd-roadmap-task:hover{border-color:#b9d9d0;box-shadow:0 5px 14px rgba(26,65,56,.05)}
+.jd-roadmap-task strong{font-size:13px;line-height:1.5}
+.jd-roadmap-task small,.jd-roadmap-task em{font-size:12px;line-height:1.6}
+.jd-no-resume{margin:0}
+.career-note{align-items:flex-start;line-height:1.7}
+@media(max-width:900px){.jd-skills-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.jd-roadmap-list{grid-template-columns:1fr}}
+@media(max-width:700px){.career-wrap{width:min(100% - 28px,620px);margin:24px auto 48px}.career-hero{padding:23px 21px}.career-card{padding:22px}.career-card>p{min-height:0}.jd-results:not([hidden]),.resume-results,.resume-history{padding:19px}.jd-result-heading{align-items:flex-start;flex-direction:column}.jd-match-score{font-size:32px}.jd-report-section{padding:17px}.jd-skills-grid,.jd-recommendations-grid,.jd-questions-grid{grid-template-columns:1fr}.jd-roadmap{padding:18px}.jd-roadmap-header{align-items:stretch}.jd-roadmap-header>div{width:100%}#jd-roadmap-duration-form{width:100%;box-sizing:border-box;justify-content:space-between}.jd-roadmap-task{min-height:0}}
+@media(prefers-reduced-motion:reduce){.career-card,.resume-upload-form button,.jd-analysis-form button,.jd-roadmap-header button,.jd-roadmap-task{transition:none}}
