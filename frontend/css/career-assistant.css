@@ -169,20 +169,3 @@ body{background:rgb(242,229,210)}
 @media(max-width:900px){.jd-skills-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.jd-roadmap-list{grid-template-columns:1fr}}
 @media(max-width:700px){.career-wrap{width:min(100% - 28px,620px);margin:24px auto 48px}.career-hero{padding:23px 21px}.career-card{padding:22px}.career-card>p{min-height:0}.jd-results:not([hidden]),.resume-results,.resume-history{padding:19px}.jd-result-heading{align-items:flex-start;flex-direction:column}.jd-match-score{font-size:32px}.jd-report-section{padding:17px}.jd-skills-grid,.jd-recommendations-grid,.jd-questions-grid{grid-template-columns:1fr}.jd-roadmap{padding:18px}.jd-roadmap-header{align-items:stretch}.jd-roadmap-header>div{width:100%}#jd-roadmap-duration-form{width:100%;box-sizing:border-box;justify-content:space-between}.jd-roadmap-task{min-height:0}}
 @media(prefers-reduced-motion:reduce){.career-card,.resume-upload-form button,.jd-analysis-form button,.jd-roadmap-header button,.jd-roadmap-task{transition:none}}
-
-/* Prep4Int brand palette: indigo actions on a warm golden canvas */
-:root{--career-accent:#5146df;--career-ink:#17213b;--career-muted:#667085}
-body{background:#f3e6d2}
-.career-wrap{color:#17213b}
-.career-kicker,.career-label{color:#5146df}
-.career-hero{background:linear-gradient(125deg,#fffdf9 0%,#fff6e8 100%);border-color:#eadfce}
-.career-card,.career-next,.resume-results,.resume-history,.jd-results:not([hidden]){background:#fffdf9;border-color:#eadfce;box-shadow:0 10px 28px rgba(62,48,28,.08)}
-.career-icon,.jd-section-icon,.heading-icon,.side-icon{background:#eef0ff;color:#5146df}
-.career-interview-link,.resume-upload-form button,.jd-analysis-form button,.jd-roadmap-header button{background:#5146df}
-.career-interview-link:hover,.resume-upload-form button:hover,.jd-analysis-form button:hover,.jd-roadmap-header button:hover{background:#3730a3}
-.resume-upload-form,.jd-analysis-form,.resume-score-breakdown,.jd-roadmap{background:#fff8ec;border-color:#eadfce}
-.resume-chip{background:#eef0ff;color:#4338ca}
-.jd-match-score{background:#f2f1ff;border-color:#dedcff;color:#4338ca}
-.jd-roadmap-task,.jd-question,.jd-recommendation,.jd-skill-row{background:#fffdf9;border-color:#eee3d3}
-.score-track span,.jd-progress-track span{background:#5146df}
-@media(prefers-reduced-motion:reduce){.career-card{transition:none}}
