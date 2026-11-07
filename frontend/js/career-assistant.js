@@ -122,19 +122,27 @@
             const recommendations = preparation.recommendations || [];
             jdResults.hidden = false;
             jdResults.innerHTML = `
-              <h2>JD Analysis · ${escapeHtml(preparation.role)}</h2>
-              <p>${escapeHtml(preparation.company || "Company not specified")} · ${escapeHtml(preparation.experienceLevel)} · ${escapeHtml(preparation.roadmapDays)}-day roadmap</p>
-              <div class="jd-match-score">${escapeHtml(preparation.matchPercentage ?? 0)}% <small>estimated resume match</small></div>
-              ${preparation.resumeAnalysisId ? "" : '<p class="jd-no-resume">No saved resume was available. Upload a resume to get a meaningful match score.</p>'}
-              <div class="jd-result-grid">
-                <section class="resume-result-section"><h3>Required skills and match</h3>
-                  ${skills.length ? skills.map(skill => '<div class="jd-skill-row"><div><strong>' + escapeHtml(skill.name) + '</strong><small>' + escapeHtml(skill.category) + ' · ' + escapeHtml(skill.priority) + '</small><p>' + escapeHtml(skill.notes) + '</p></div><span class="jd-status jd-' + escapeHtml(skill.status) + '">' + escapeHtml(skill.status.replace("-", " ")) + '</span></div>').join("") : "<p>No skills were extracted.</p>"}
-                </section>
-                <section class="resume-result-section"><h3>Recommendations by priority</h3>${recommendations.length ? recommendations.map(item => { const entry = typeof item === "string" ? { priority: "important", category: "Technical", text: item } : item; return '<div class="jd-recommendation"><span class="jd-status jd-' + escapeHtml(entry.priority) + '">' + escapeHtml(entry.priority) + '</span><small>' + escapeHtml(entry.category) + '</small><p>' + escapeHtml(entry.text) + '</p></div>'; }).join("") : "<p>No recommendations returned.</p>"}<h3>Interview questions with answer guidance</h3>${questions.length ? questions.map((item, index) => '<details class="jd-question"><summary><span>' + escapeHtml(item.question) + '</span><small>' + escapeHtml(item.category) + ' · ' + escapeHtml(item.difficulty) + '</small></summary>' + (item.expectedAnswerPoints && item.expectedAnswerPoints.length ? '<strong>Expected answer should cover:</strong>' + renderList(item.expectedAnswerPoints) : "<p>Prepare a structured answer with an example from your projects.</p>") + '</details>').join("") : "<p>No questions generated.</p>"}</section>
+              <div class="jd-result-heading">
+                <div><span class="career-kicker">YOUR PERSONALIZED REPORT</span><h2>JD Analysis · ${escapeHtml(preparation.role)}</h2>
+                <p>${escapeHtml(preparation.company || "Company not specified")} <span>•</span> ${escapeHtml(preparation.experienceLevel)} <span>•</span> ${escapeHtml(preparation.roadmapDays)}-day roadmap</p></div>
+                <div class="jd-match-score">${escapeHtml(preparation.matchPercentage ?? 0)}% <small>estimated resume match</small></div>
               </div>
+              ${preparation.resumeAnalysisId ? "" : '<p class="jd-no-resume">No saved resume was available. Upload a resume to get a meaningful match score.</p>'}
+              <section class="jd-report-section jd-skills-section">
+                <div class="jd-section-heading"><span class="jd-section-icon"><i class="fa-solid fa-list-check"></i></span><div><h3>Required skills and match</h3><p>See which requirements your resume already demonstrates.</p></div></div>
+                <div class="jd-skills-grid">${skills.length ? skills.map(skill => '<article class="jd-skill-row"><div class="jd-skill-copy"><strong>' + escapeHtml(skill.name) + '</strong><small>' + escapeHtml(skill.category) + ' · ' + escapeHtml(skill.priority) + '</small><p>' + escapeHtml(skill.notes) + '</p></div><span class="jd-status jd-' + escapeHtml(skill.status) + '">' + escapeHtml(skill.status.replace("-", " ")) + '</span></article>').join("") : "<p>No skills were extracted.</p>"}</div>
+              </section>
+              <section class="jd-report-section">
+                <div class="jd-section-heading"><span class="jd-section-icon"><i class="fa-solid fa-lightbulb"></i></span><div><h3>Recommendations by priority</h3><p>Practical next steps to improve your role readiness.</p></div></div>
+                <div class="jd-recommendations-grid">${recommendations.length ? recommendations.map(item => { const entry = typeof item === "string" ? { priority: "important", category: "Technical", text: item } : item; return '<article class="jd-recommendation"><span class="jd-status jd-' + escapeHtml(entry.priority) + '">' + escapeHtml(entry.priority) + '</span><small>' + escapeHtml(entry.category) + '</small><p>' + escapeHtml(entry.text) + '</p></article>'; }).join("") : "<p>No recommendations returned.</p>"}</div>
+              </section>
+              <section class="jd-report-section">
+                <div class="jd-section-heading"><span class="jd-section-icon"><i class="fa-solid fa-comments"></i></span><div><h3>Interview questions with answer guidance</h3><p>Practice these questions before your interview.</p></div></div>
+                <div class="jd-questions-grid">${questions.length ? questions.map((item, index) => '<details class="jd-question"><summary><span>' + escapeHtml(item.question) + '</span><small>' + escapeHtml(item.category) + ' · ' + escapeHtml(item.difficulty) + '</small></summary>' + (item.expectedAnswerPoints && item.expectedAnswerPoints.length ? '<strong>Expected answer should cover:</strong>' + renderList(item.expectedAnswerPoints) : "<p>Prepare a structured answer with an example from your projects.</p>") + '</details>').join("") : "<p>No questions generated.</p>"}</div>
+              </section>
               ${Number(preparation.roadmapDays) <= 2 ? '<p class="jd-short-roadmap-warning">Short preparation window: focus on must-have gaps and interview practice. This plan cannot replace longer-term learning.</p>' : ""}
-              <section class="jd-roadmap"><div class="jd-roadmap-header"><div><h3>Personalized preparation roadmap</h3><p>${completed} of ${roadmap.length} days completed</p></div>
-                <form id="jd-roadmap-duration-form"><label for="jd-roadmap-days">Change duration</label><input id="jd-roadmap-days" name="days" type="number" min="1" max="90" value="${escapeHtml(preparation.roadmapDays)}"><button type="submit">Regenerate</button></form></div>
+              <section class="jd-roadmap"><div class="jd-roadmap-header"><div><span class="career-kicker">YOUR ACTION PLAN</span><h3>Personalized preparation roadmap</h3><p>${completed} of ${roadmap.length} days completed</p></div>
+                <form id="jd-roadmap-duration-form"><label for="jd-roadmap-days">Roadmap duration</label><input id="jd-roadmap-days" name="days" type="number" min="1" max="90" value="${escapeHtml(preparation.roadmapDays)}"><span>days</span><button type="submit">Regenerate plan</button></form></div>
                 <div class="jd-progress-track"><span style="width:${roadmap.length ? completed / roadmap.length * 100 : 0}%"></span></div>
                 <div class="jd-roadmap-list">${roadmap.map(task => '<label class="jd-roadmap-task"><input type="checkbox" data-roadmap-day="' + escapeHtml(task.day) + '" ' + (task.completed ? "checked" : "") + '><span><strong>Day ' + escapeHtml(task.day) + ': ' + escapeHtml(task.title) + '</strong><small>' + escapeHtml(task.description) + '</small><em>' + escapeHtml((task.topics || []).join(" · ")) + '</em></span></label>').join("")}</div>
               </section>`;
