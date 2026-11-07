@@ -88,3 +88,15 @@ body {
 .interview-context-hint{margin:-4px 0 14px;color:#71807a;font-size:11px;line-height:1.5}
 .tailored-context-fields select{width:100%;min-width:0}
 @media(max-width:640px){.tailored-context-fields{grid-template-columns:1fr}}
+/* Prep4Int brand palette for AI interview */
+:root{--interview-page-bg:#f3e6d2;--interview-accent:#5146df;--interview-ink:#17213b;--interview-muted:#667085;--interview-border:#eadfce}
+body{background:#f3e6d2}
+.interview-kicker{color:#5146df}
+.interview-card{background:#fffdf9;border-color:#eadfce;box-shadow:0 10px 28px rgba(62,48,28,.08)}
+.heading-icon,.side-icon,.info-card li span{background:#eef0ff;color:#5146df}
+.mode-option input:checked+span{border-color:#5146df;color:#4338ca;background:#f1f0ff}
+.session-summary{background:#fff8ec}
+.start-interview-btn{background:#5146df}
+.start-interview-btn:hover{background:#3730a3}
+.history-item{border-color:#eee3d3}
+.history-item .session-state,.history-heading button{color:#5146df}
