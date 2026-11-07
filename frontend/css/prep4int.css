@@ -1922,3 +1922,21 @@ body:has(.whole) {
     }
     .whole .card { height: 290px; }
 }
+
+/* Keep the DSA topic search section blended with the page background */
+body:has(.whole) .topic-search {
+    background: #f2e5d2 !important;
+    color: #332b24;
+    margin: 0 auto;
+    padding: 14px 0 30px;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+body:has(.whole) .topic-search label,
+body:has(.whole) #topic-search-status {
+    color: #332b24;
+}
+body:has(.whole) #topic-search-input {
+    background: #fffdf9;
+}
