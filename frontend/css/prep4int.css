@@ -1940,3 +1940,79 @@ body:has(.whole) #topic-search-status {
 body:has(.whole) #topic-search-input {
     background: #fffdf9;
 }
+
+
+/* Practice Questions page: blend the search area into the warm golden page */
+body:has(.question-search) {
+    min-height: 100vh;
+    background: #f2e5d2;
+}
+body:has(.question-search) .xx,
+body:has(.question-search) .xx .a,
+body:has(.question-search) .quegrid-container {
+    background: #f2e5d2;
+}
+body:has(.question-search) .xx .a {
+    box-sizing: border-box;
+    min-height: 0;
+    margin: 0;
+    padding: 28px 20px 12px;
+    border: 0;
+}
+body:has(.question-search) .xx .aa {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #332b24;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    line-height: 1.2;
+    box-shadow: none;
+}
+body:has(.question-search) .question-search {
+    width: min(100% - 40px, 840px);
+    max-width: 840px;
+    margin: 10px auto 18px;
+    padding: 16px 20px;
+    border: 1px solid rgba(174, 133, 79, .22);
+    border-radius: 14px;
+    background: rgba(255, 250, 242, .22);
+    box-shadow: 0 4px 14px rgba(93, 65, 31, .045);
+}
+body:has(.question-search) .question-search label,
+body:has(.question-search) #question-search-status {
+    color: #332b24;
+}
+body:has(.question-search) #question-search-input {
+    min-height: 46px;
+    border-color: #d2bea4;
+    border-radius: 10px;
+    background: #fffdf9;
+    color: #332b24;
+}
+body:has(.question-search) #question-search-input:focus {
+    border-color: #a87936;
+    outline: 3px solid rgba(168, 121, 54, .16);
+}
+body:has(.question-search) .quegrid-container {
+    padding: 0 5px 28px;
+}
+body:has(.question-search) .quegrid-item {
+    border: 1px solid rgba(87, 102, 55, .35);
+    border-radius: 18px;
+    background: rgb(236, 250, 205);
+    box-shadow: 0 3px 10px rgba(63, 56, 37, .07);
+}
+@media (max-width: 550px) {
+    body:has(.question-search) .xx .a {
+        padding: 22px 14px 8px;
+    }
+    body:has(.question-search) .question-search {
+        width: calc(100% - 28px);
+        margin: 10px auto 16px;
+        padding: 14px;
+    }
+    body:has(.question-search) .quegrid-container {
+        padding: 0 8px 22px;
+    }
+}
